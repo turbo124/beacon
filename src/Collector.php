@@ -2,6 +2,8 @@
 
 namespace Turbo124\Collector;
 
+use Turbo124\Collector\Collector\Generator;
+
 class Collector
 {
     private $config;
