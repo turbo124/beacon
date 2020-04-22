@@ -1,4 +1,4 @@
-# Very short description of the package
+# Laravel application collector
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/turbo124/collector.svg?style=flat-square)](https://packagist.org/packages/turbo124/collector)
 [![Build Status](https://img.shields.io/travis/turbo124/collector/master.svg?style=flat-square)](https://travis-ci.org/turbo124/collector)
