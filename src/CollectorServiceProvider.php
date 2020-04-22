@@ -21,7 +21,7 @@ class CollectorServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('collector.php'),
+                __DIR__.'/../config/collector.php' => config_path('collector.php'),
             ], 'config');
 
             // Publishing the views.
