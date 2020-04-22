@@ -1,0 +1,54 @@
+{
+    "name": "turbo124/collector",
+    "description": "Application level data collector",
+    "keywords": [
+        "turbo124",
+        "collector"
+    ],
+    "homepage": "https://github.com/turbo124/collector",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "David Bomba",
+            "email": "turbo124@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "illuminate/support": "^6.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.0",
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Turbo124\\Collector\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Turbo124\\Collector\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Turbo124\\Collector\\CollectorServiceProvider"
+            ],
+            "aliases": {
+                "Collector": "Turbo124\\Collector\\CollectorFacade"
+            }
+        }
+    }
+}
