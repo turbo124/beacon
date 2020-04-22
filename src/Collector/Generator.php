@@ -28,7 +28,7 @@ class Generator
 
 	private function apiKey()
 	{
-		return config('collect.api_key');
+		return config('collector.api_key');
 	}
 
 	private function httpClient()
