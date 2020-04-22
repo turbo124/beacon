@@ -3,6 +3,7 @@
 namespace Turbo124\Collector;
 
 use Illuminate\Support\ServiceProvider;
+use Turbo124\Collector\Collector;
 
 class CollectorServiceProvider extends ServiceProvider
 {

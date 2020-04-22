@@ -47,7 +47,7 @@ class Generator
 	private function fire(array $data)
 	{
 		$client = $this->httpClient();	
-		$response = $client->request('POST',$this->endPoint(), ['body' => $data]);
+		$response = $client->request('POST',$this->endPoint(), ['form_params' => $data]);
 		return $this->handleResponse($response);
 	}
 
