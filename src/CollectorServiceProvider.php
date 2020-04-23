@@ -2,8 +2,10 @@
 
 namespace Turbo124\Collector;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
 use Turbo124\Collector\Collector;
+use Turbo124\Collector\Jobs\BatchMetrics;
 
 class CollectorServiceProvider extends ServiceProvider
 {
@@ -38,5 +40,12 @@ class CollectorServiceProvider extends ServiceProvider
         $this->app->singleton('collector', function () {
             return new Collector;
         });
+
+        /* Register the scheduler */
+        $this->app->booted(function () {
+            $schedule = app(Schedule::class);
+            $schedule->job(new BatchMetrics())->everyFiveMinutes();
+        });
+
     }
 }

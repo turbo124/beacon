@@ -11,6 +11,11 @@ class Generator
 		return config('collector.endpoint') . '/collect';
 	}
 
+	private function batchEndPoint()
+	{
+		return config('collector.endpoint') . '/collect/batch';
+	}
+
 	private function apiKey()
 	{
 		return config('collector.api_key');
@@ -27,6 +32,14 @@ class Generator
 		$response = $client->request('POST',$this->endPoint(), ['form_params' => $metric]);
 		return $this->handleResponse($response);
 	}
+
+	public function batchFire($metric_array)
+	{
+		$client = $this->httpClient();	
+		$response = $client->request('POST',$this->batchEndPoint(), ['form_params' => $metric_array]);
+		return $this->handleResponse($response);
+	}
+
 
 	private function handleResponse($response)
 	{

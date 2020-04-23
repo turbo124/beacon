@@ -2,6 +2,7 @@
 
 namespace Turbo124\Collector;
 
+use Illuminate\Support\Facades\Cache;
 use Turbo124\Collector\Collector\Generator;
 use Turbo124\Collector\Jobs\CreateMetric;
 
@@ -53,5 +54,10 @@ class Collector
     public function queue()
     {
         CreateMetric::dispatch($this->metric);
+    }
+
+    public function batch()
+    {
+        Cache::tags(['collector'])->put(config('collector.api_key'), $this->metric);
     }
 }
