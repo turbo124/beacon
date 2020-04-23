@@ -9,11 +9,8 @@ class Collector
 
     public $metric;
 
-    private $generator;
-
-    public function __construct(Generator $generator)
+    public function __construct()
     {
-    	$this->generator = $generator;
     }
 
     public function create($metric)
@@ -46,6 +43,7 @@ class Collector
 
     public function send()
     {
-    	$this->generator->fire($this->metric);
+        $generator = new Generator();
+    	$generator->fire($this->metric);
     }
 }
