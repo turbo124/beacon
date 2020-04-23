@@ -19,6 +19,11 @@ class CollectorServiceProvider extends ServiceProvider
             ], 'config');
 
         }
+
+        \Illuminate\Support\Facades\Event::listen(
+            Turbo124\Collector\Events\MetricRegistered::class,
+            MyListener::class
+        );
     }
 
     /**

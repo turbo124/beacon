@@ -3,6 +3,7 @@
 namespace Turbo124\Collector;
 
 use Turbo124\Collector\Collector\Generator;
+use Turbo124\Collector\Jobs\CreateMetric;
 
 class Collector
 {
@@ -47,5 +48,10 @@ class Collector
     {
         $generator = new Generator();
     	$generator->fire($this->metric);
+    }
+
+    public function queue()
+    {
+        CreateMetric::dispatch($this->metric);
     }
 }
