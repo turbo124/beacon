@@ -1,11 +1,9 @@
 # Laravel application collector
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/turbo124/collector.svg?style=flat-square)](https://packagist.org/packages/turbo124/collector)
-[![Build Status](https://img.shields.io/travis/turbo124/collector/master.svg?style=flat-square)](https://travis-ci.org/turbo124/collector)
-[![Quality Score](https://img.shields.io/scrutinizer/g/turbo124/collector.svg?style=flat-square)](https://scrutinizer-ci.com/g/turbo124/collector)
 [![Total Downloads](https://img.shields.io/packagist/dt/turbo124/collector.svg?style=flat-square)](https://packagist.org/packages/turbo124/collector)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+Application level offsite metrics collector for laravel.
 
 ## Installation
 
@@ -16,9 +14,30 @@ composer require turbo124/collector
 ```
 
 ## Usage
+The default method to send metrics is to create a static property class (see /src/ExampleMetric/GenericCounter) and build a collect like this
 
 ``` php
-// Usage description here
+Collector::create(new GenericCounter())
+        ->increment()
+        ->batch();
+```
+
+This will batch the metric requests and an underlying Scheduler job will process all metric every 5 minutes (please note you will need to have the Laravel Scheduler running for these jobs to be dispatched).
+
+Whilst not advised to do this in production due to the latency overhead, if your metric needs to be fired immediately you can do this syncronously using the following.
+
+``` php
+Collector::create(new GenericCounter())
+        ->increment()
+        ->send();
+```
+
+A better way to handle jobs that need to be fired immediately without blocking would be to use the ->queue() method which will dispatch a Job onto the applications queue
+
+``` php
+Collector::create(new GenericCounter())
+        ->increment()
+        ->queue();
 ```
 
 ### Testing
@@ -30,6 +49,7 @@ composer test
 ### Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+
 
 ## Contributing
 
@@ -48,6 +68,3 @@ If you discover any security related issues, please email turbo124@gmail.com ins
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
