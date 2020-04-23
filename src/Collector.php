@@ -6,79 +6,46 @@ use Turbo124\Collector\Collector\Generator;
 
 class Collector
 {
-    private $config;
 
-    /**
-     * The Collector type
-     * - counter
-     * - histogram
-     * - gauge
-     * 
-     * @var string
-     * 
-     */
-    private $type;
-
-    /**
-     * The Collector name
-     * @var string
-     * 
-     */
-    private $name;
+    public $metric;
 
     private $generator;
 
-    public function __construct()
+    public function __construct(Generator $generator)
     {
+    	$this->generator = $generator;
     }
 
-    /**
-     * Create a collector message
-     * 
-     * parameters
-     * 	
-     * @param  [type] $config [description]
-     * @return [type]         [description]
-     */
-    public function create()
+    public function create($metric)
     {
-    	$this->generator = new Generator();
+    	$this->metric = $metric;
+    	$this->metric->datetime = date("Y-m-d H:i:s");
+    	$this->metric->api_key = config('collector.api_key');
+    }
+
+    public function increment()
+    {
+    	$this->metric->counter++;
 
     	return $this;
     }
 
-    public function setType(string $collector_type)
+    public function decrement()
     {
-    	$this->type = $collector_type;
-    
+    	$this->metric->counter--;
+
     	return $this;
     }
 
-    public function setName(string $collector_name)
+    public function setCount($count)
     {
-    	$this->name = $collector_name;
-    
+    	$this->metric->counter = $count;
+
     	return $this;
     }
 
-    public function getType()
+    public function send()
     {
-    	return $this->type;
+    	$this->generator->fire($this->metric);
     }
-
-    public function getName()
-    {
-    	return $this->name;
-    }
-
-    public function inc()
-    {
-    	$this->generator->increment($this);
-    }
-
-    public function dec()
-    {
-    	$this->generator->decrement($this);
-    }
-
 }

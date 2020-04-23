@@ -6,21 +6,6 @@ use Turbo124\Collector\Collector;
 
 class Generator
 {
-
-	public function increment(Collector $collector)
-	{
-		date_default_timezone_set('UTC'); 
-
-		$data = array_merge($this->buildRequest($collector), ['action' => 'increment', 'timestamp'=> date("Y-m-d H:i:s")]);
-
-		return $this->fire($data);
-	}
-
-	public function decrement(Collector $collector)
-	{
-		$data = array_merge($this->buildRequest($collector), ['action' => 'decrement', 'timestamp'=> date("Y-m-d H:i:s")]);
-	}
-
 	private function endPoint()
 	{
 		return config('collector.endpoint') . '/collect';
@@ -36,18 +21,10 @@ class Generator
 		return new \GuzzleHttp\Client(['headers' => ['X-API-KEY' => $this->apiKey()]]);
 	}
 
-	private function buildRequest(Collector $collector)
-	{
-		return [
-			'name' => $collector->getName(),
-			'type' => $collector->getType(),
-		];
-	}
-
-	private function fire(array $data)
+	private function fire($metric)
 	{
 		$client = $this->httpClient();	
-		$response = $client->request('POST',$this->endPoint(), ['form_params' => $data]);
+		$response = $client->request('POST',$this->endPoint(), ['form_params' => $metric]);
 		return $this->handleResponse($response);
 	}
 
