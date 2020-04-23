@@ -21,7 +21,7 @@ class Generator
 		return new \GuzzleHttp\Client(['headers' => ['X-API-KEY' => $this->apiKey()]]);
 	}
 
-	private function fire($metric)
+	public function fire($metric)
 	{
 		$client = $this->httpClient();	
 		$response = $client->request('POST',$this->endPoint(), ['form_params' => $metric]);

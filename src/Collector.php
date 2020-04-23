@@ -18,6 +18,8 @@ class Collector
     	$this->metric = $metric;
     	$this->metric->datetime = date("Y-m-d H:i:s");
     	$this->metric->api_key = config('collector.api_key');
+
+        return $this;
     }
 
     public function increment()
