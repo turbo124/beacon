@@ -58,6 +58,8 @@ class Collector
 
     public function batch()
     {
+        config(['cache.default' => 'array']);
+
         Cache::tags(['collector'])->put(config('collector.api_key'), $this->metric);
     }
 }
