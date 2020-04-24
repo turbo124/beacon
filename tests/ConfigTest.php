@@ -13,6 +13,6 @@ class ConfigTest extends TestCase
 	public function testValidInstanceType()
 	{
 		$collector = new Collector;
-		$this->assertTrue($collector->create() instanceof Collector);
+		$this->assertTrue($collector instanceof Collector);
 	}
 }

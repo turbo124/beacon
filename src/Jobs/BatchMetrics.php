@@ -31,7 +31,7 @@ class BatchMetrics
 
         config(['cache.default' => 'array']);
 
-        $metrics = Cache::tags(['collector'])->get(config('collector.api_key'));
+        $metrics = Cache::tags(['collector'])->get('collector');
 
         $generator = new Generator();
         $generator->batchFire($metrics);

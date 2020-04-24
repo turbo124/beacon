@@ -17,38 +17,38 @@ class Collector
 
     public function create($metric)
     {
-    	$this->metric = $metric;
-    	$this->metric->datetime = date("Y-m-d H:i:s");
-    	$this->metric->api_key = config('collector.api_key');
+        $this->metric = $metric;
+        $this->metric->datetime = date("Y-m-d H:i:s");
+        $this->metric->api_key = config('collector.api_key');
 
         return $this;
     }
 
     public function increment()
     {
-    	$this->metric->counter++;
+        $this->metric->counter++;
 
-    	return $this;
+        return $this;
     }
 
     public function decrement()
     {
-    	$this->metric->counter--;
+        $this->metric->counter--;
 
-    	return $this;
+        return $this;
     }
 
     public function setCount($count)
     {
-    	$this->metric->counter = $count;
+        $this->metric->counter = $count;
 
-    	return $this;
+        return $this;
     }
 
     public function send()
     {
         $generator = new Generator();
-    	$generator->fire($this->metric);
+        $generator->fire($this->metric);
     }
 
     public function queue()
@@ -60,6 +60,16 @@ class Collector
     {
         config(['cache.default' => 'array']);
 
-        Cache::tags(['collector'])->put(config('collector.api_key'), $this->metric);
+        $data = Cache::tags(['collector'])->get('collector');
+
+        if(is_array($data)){
+            $data[] = $this->metric;
+        }
+        else {
+            $data = [];
+            $data[] = $this->metric;
+        }
+
+        Cache::tags(['collector'])->put('collector', $data);
     }
 }
