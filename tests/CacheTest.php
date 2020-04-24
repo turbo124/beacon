@@ -15,9 +15,7 @@ class CacheTest extends TestCase
 	{
 		$test_array = ['a' => 'b', 'c'=>'d'];
 
-        config(['cache.default' => 'array']);
-
-        $data = Cache::tags(['collector'])->get('collector');
+        $data = Cache::get('collector');
 
         if(is_array($data)){
             $data[] = $test_array;
@@ -27,9 +25,9 @@ class CacheTest extends TestCase
             $data[] = $test_array;
         }
 
-        Cache::tags(['collector'])->put('collector', $data);
+        Cache::put('collector', $data);
 
-        $test_data = Cache::tags(['collector'])->get('collector');
+        $test_data = Cache::get('collector');
 
         $this->assertTrue(is_array($test_data));
 

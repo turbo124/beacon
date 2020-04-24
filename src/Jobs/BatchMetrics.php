@@ -29,14 +29,12 @@ class BatchMetrics
     public function handle()
     {
 
-        config(['cache.default' => 'array']);
-
-        $metrics = Cache::tags(['collector'])->get('collector');
+        $metrics = Cache::get('collector');
 
         $generator = new Generator();
         $generator->batchFire($metrics);
 
-        Cache::tags(['collector'])->flush();
+        Cache::forget('collector');
         
     }
 }
