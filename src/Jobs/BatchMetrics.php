@@ -29,12 +29,12 @@ class BatchMetrics
     public function handle()
     {
 
-        $metrics = Cache::get('collector');
+        $metrics = Cache::get(config('collector.cache_key'));
 
         $generator = new Generator();
         $generator->batchFire($metrics);
 
-        Cache::forget('collector');
+        Cache::forget(config('collector.cache_key'));
         
     }
 }

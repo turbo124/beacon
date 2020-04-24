@@ -16,4 +16,11 @@ return [
      * Should batch requests
      */
     'batch'    => true,
+
+    /**
+     * The default key used to store
+     * metrics for batching
+     */
+    'cache_key' => 'collector',
+
 ];

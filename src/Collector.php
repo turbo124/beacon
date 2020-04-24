@@ -59,7 +59,7 @@ class Collector
     public function batch()
     {
 
-        $data = Cache::get('collector');
+        $data = Cache::get(config('collector.cache_key'));
 
         if(is_array($data)){
             $data[] = $this->metric;
@@ -69,6 +69,6 @@ class Collector
             $data[] = $this->metric;
         }
 
-        Cache::put('collector', $data);
+        Cache::put(config('collector.cache_key'), $data);
     }
 }
