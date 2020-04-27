@@ -30,7 +30,7 @@ class BatchMetrics
     {
 
         $metrics = Cache::get(config('collector.cache_key'));
-
+        
         $generator = new Generator();
         $generator->batchFire($metrics);
 

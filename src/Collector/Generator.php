@@ -6,14 +6,14 @@ use Turbo124\Collector\Collector;
 
 class Generator
 {
-	private function endPoint()
+	private function endPoint($uri)
 	{
-		return config('collector.endpoint') . '/collect';
+		return config('collector.endpoint')."/{$uri}/add";
 	}
 
-	private function batchEndPoint()
+	private function batchEndPoint($uri)
 	{
-		return config('collector.endpoint') . '/collect/batch';
+		return config('collector.endpoint')."/{$uri}/batch";
 	}
 
 	private function apiKey()
@@ -28,15 +28,22 @@ class Generator
 
 	public function fire($metric)
 	{
+		$data['metrics'] = $metric;
+
 		$client = $this->httpClient();	
-		$response = $client->request('POST',$this->endPoint(), ['form_params' => $metric]);
+		$response = $client->request('POST',$this->endPoint($metric->type), ['form_params' => $data]);
 		return $this->handleResponse($response);
 	}
 
 	public function batchFire($metric_array)
 	{
+		if(!is_array($metric_array))
+			return;
+		
+		$data['metrics'] = $metric_array;
+
 		$client = $this->httpClient();	
-		$response = $client->request('POST',$this->batchEndPoint(), ['form_params' => $metric_array]);
+		$response = $client->request('POST',$this->batchEndPoint($metric_array[0]->type), ['form_params' => $data]);
 		return $this->handleResponse($response);
 	}
 

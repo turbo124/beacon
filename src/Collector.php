@@ -47,19 +47,28 @@ class Collector
 
     public function send()
     {
+        if(!config('collector.enabled'))
+            return;
+
         $generator = new Generator();
         $generator->fire($this->metric);
     }
 
     public function queue()
     {
+        if(!config('collector.enabled'))
+            return;
+        
         CreateMetric::dispatch($this->metric);
     }
 
     public function batch()
     {
 
-        $data = Cache::get(config('collector.cache_key'));
+        if(!config('collector.enabled'))
+            return;
+
+        $data = Cache::get(config('collector.cache_key') . '_' . $this->metric->type);
 
         if(is_array($data)){
             $data[] = $this->metric;
@@ -69,6 +78,6 @@ class Collector
             $data[] = $this->metric;
         }
 
-        Cache::put(config('collector.cache_key'), $data);
+        Cache::put(config('collector.cache_key') . '_' . $this->metric->type, $data);
     }
 }

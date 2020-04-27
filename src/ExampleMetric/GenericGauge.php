@@ -2,19 +2,20 @@
 
 namespace Turbo124\Collector\ExampleMetric;
 
-class GenericCounter 
+class GenericGauge 
 {
 
 	/**
 	 * The type of Sample
 	 *
-	 * Monotonically incrementing counter
+	 *	A gauge can be used to measure a given value 
+	 *	per time interval
 	 * 
-	 * 	- counter
+	 * 	- gauge
 	 * 	
 	 * @var string
 	 */
-	public $type = 'counter';
+	public $type = 'gauge';
 
 	/**
 	 * The name of the counter
@@ -35,7 +36,7 @@ class GenericCounter
 	 * The increment amount... should always be 
 	 * set to 0
 	 * 
-	 * @var integer
+	 * @var double
 	 */
 	public $metric = 0;
 
