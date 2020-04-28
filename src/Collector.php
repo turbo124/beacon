@@ -19,28 +19,27 @@ class Collector
     {
         $this->metric = $metric;
         $this->metric->datetime = date("Y-m-d H:i:s");
-        $this->metric->api_key = config('collector.api_key');
 
         return $this;
     }
 
     public function increment()
     {
-        $this->metric->counter++;
+        $this->metric->metric++;
 
         return $this;
     }
 
     public function decrement()
     {
-        $this->metric->counter--;
+        $this->metric->metric--;
 
         return $this;
     }
 
     public function setCount($count)
     {
-        $this->metric->counter = $count;
+        $this->metric->metric = $count;
 
         return $this;
     }

@@ -49,7 +49,7 @@ class Generator
 
 
 	private function handleResponse($response)
-	{
+	{info(print_r($response,1));
 		switch ($response->getStatusCode()) {
 			case 200:
 				# code...

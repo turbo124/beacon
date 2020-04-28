@@ -7,10 +7,10 @@ return [
      */
     'enabled'   =>  true,
 
-	/**
-	 * The API endpoint for logs
-	 */
-    'endpoint'  => 'http://collector.test:8000',
+    /**
+     * The API endpoint for logs
+     */
+    'endpoint'  => 'http://collector.test:8000/api',
 
     /**
      * Your API key

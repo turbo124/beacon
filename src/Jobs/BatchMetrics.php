@@ -28,13 +28,16 @@ class BatchMetrics
      */
     public function handle()
     {
+        $metric_types = ['counter', 'gauge', 'multi_metric'];
 
-        $metrics = Cache::get(config('collector.cache_key'));
-        
-        $generator = new Generator();
-        $generator->batchFire($metrics);
+        foreach($metric_types as $type)
+        {
+            $metrics = Cache::get(config('collector.cache_key') . '_' . $type);
+            
+            $generator = new Generator();
+            $generator->batchFire($metrics);
 
-        Cache::forget(config('collector.cache_key'));
-        
+            Cache::put(config('collector.cache_key') . '_' . $type, []);
+        }
     }
 }
