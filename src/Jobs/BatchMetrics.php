@@ -33,6 +33,9 @@ class BatchMetrics
         foreach($metric_types as $type)
         {
             $metrics = Cache::get(config('collector.cache_key') . '_' . $type);
+      
+            if(!is_array($metrics))
+                return;
             
             $generator = new Generator();
             $generator->batchFire($metrics);

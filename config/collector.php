@@ -5,17 +5,17 @@ return [
     /**
      * Enable or disable the collector
      */
-    'enabled'   =>  true,
+    'enabled'   =>   true,
 
     /**
      * The API endpoint for logs
      */
-    'endpoint'  => 'http://collector.test:8000/api',
+    'endpoint'  => 'https://app.lightlogs.com/api',
 
     /**
      * Your API key
      */
-    'api_key'   => '123456',
+    'api_key'   => '',
 
     /**
      * Should batch requests

@@ -23,7 +23,12 @@ class Generator
 
 	private function httpClient()
 	{
-		return new \GuzzleHttp\Client(['headers' => ['X-API-KEY' => $this->apiKey()]]);
+		return new \GuzzleHttp\Client(['headers' => 
+			[ 
+		    'Authorization' => 'Bearer ' . $this->apiKey(),        
+		    'Accept'        => 'application/json'
+			]
+		]);
 	}
 
 	public function fire($metric)
@@ -37,7 +42,7 @@ class Generator
 
 	public function batchFire($metric_array)
 	{
-		if(!is_array($metric_array))
+		if(!is_array($metric_array) || count($metric_array) == 0)
 			return;
 		
 		$data['metrics'] = $metric_array;
@@ -49,7 +54,7 @@ class Generator
 
 
 	private function handleResponse($response)
-	{info(print_r($response,1));
+	{
 		switch ($response->getStatusCode()) {
 			case 200:
 				# code...
