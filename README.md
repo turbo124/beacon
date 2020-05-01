@@ -3,7 +3,9 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/turbo124/collector.svg?style=flat-square)](https://packagist.org/packages/turbo124/collector)
 [![Total Downloads](https://img.shields.io/packagist/dt/turbo124/collector.svg?style=flat-square)](https://packagist.org/packages/turbo124/collector)
 
-Application offsite metrics collector for Laravel.
+This collector implements a native Laravel solution for collecting application statistics. Currently to enable this kind of functionality you would need to install Node and StatsD to your host and then begin piping your data. You'd then need to install a third party application to ingest the data and then display.
+
+This client is part of the LightLogs application framework which enables ingesting and displaying from a single Open Source application.
 
 ## Installation
 
