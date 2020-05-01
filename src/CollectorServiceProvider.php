@@ -22,10 +22,10 @@ class CollectorServiceProvider extends ServiceProvider
 
         }
 
-        \Illuminate\Support\Facades\Event::listen(
-            Turbo124\Collector\Events\MetricRegistered::class,
-            MyListener::class
-        );
+        // \Illuminate\Support\Facades\Event::listen(
+        //     Turbo124\Collector\Events\MetricRegistered::class,
+        //     MyListener::class
+        // );
     }
 
     /**
