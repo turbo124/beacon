@@ -78,6 +78,8 @@ class GenericMixedMetric
 	/**
 	 * The metric value
 	 * set to ''
+	 *
+	 * Datatype in the database is registered as VARCHAR so note the DB limits on this column type
 	 * 
 	 * @var string
 	 */
@@ -86,6 +88,8 @@ class GenericMixedMetric
 	/**
 	 * The metric value
 	 * set to ''
+	 *
+	 * Datatype in the database is registered as VARCHAR so note the DB limits on this column type
 	 * 
 	 * @var string
 	 */
@@ -94,30 +98,38 @@ class GenericMixedMetric
 	/**
 	 * The metric value
 	 * set to ''
+	 *
+	 * Datatype in the database is registered as VARCHAR so note the DB limits on this column type
 	 * 
 	 * @var string
 	 */
 	public $string_metric7 = '';
-
+	
 	/**
 	 * The metric value
 	 * set to ''
+	 *
+	 * Datatype in the database is registered as VARCHAR so note the DB limits on this column type
 	 * 
 	 * @var string
 	 */
 	public $string_metric8 = '';
-
+	
 	/**
 	 * The metric value
 	 * set to ''
+	 *
+	 * Datatype in the database is registered as VARCHAR so note the DB limits on this column type
 	 * 
 	 * @var string
 	 */
 	public $string_metric9 = '';
-
+	
 	/**
 	 * The metric value
 	 * set to ''
+	 *
+	 * Datatype in the database is registered as VARCHAR so note the DB limits on this column type
 	 * 
 	 * @var string
 	 */
