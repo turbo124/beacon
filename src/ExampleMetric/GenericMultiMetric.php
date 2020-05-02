@@ -8,7 +8,7 @@ class GenericMultiMetric
 	/**
 	 * The type of Sample
 	 *
-	 *	A multric metric allows for multiple
+	 *	A multi metric allows for multiple
 	 *	datapoints per time interval
 	 * 
 	 * 	- multi_metric
