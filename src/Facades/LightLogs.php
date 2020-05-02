@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+namespace Turbo124\Collector\Facades;
 
 class LightLogs extends Facade
 {
