@@ -49,8 +49,7 @@ class Collector
         if(!config('collector.enabled'))
             return;
 
-        $generator = new Generator();
-        $generator->fire($this->metric);
+        $generator = (new Generator())->fire($this->metric);
     }
 
     public function queue()
