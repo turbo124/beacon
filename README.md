@@ -20,9 +20,7 @@ The default method to send metrics is to create a static property class (see /sr
 
 ``` php
 
-use Turbo124\Collector\CollectorFacade as Collector;
-
-Collector::create(new GenericCounter())
+LightLogs::create(new GenericCounter())
         ->increment()
         ->batch();
 ```
@@ -35,7 +33,7 @@ Whilst not advised to do this in production due to the latency overhead, if your
 
 use Turbo124\Collector\CollectorFacade as Collector;
 
-Collector::create(new GenericCounter())
+LightLogs::create(new GenericCounter())
         ->increment()
         ->send();
 ```
@@ -46,7 +44,7 @@ A better way to handle jobs that need to be fired immediately without blocking w
 
 use Turbo124\Collector\CollectorFacade as Collector;
 
-Collector::create(new GenericCounter())
+LightLogs::create(new GenericCounter())
         ->increment()
         ->queue();
 ```
