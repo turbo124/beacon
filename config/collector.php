@@ -33,7 +33,9 @@ return [
      * host system variables using
      * the built in metrics.
      */
-    'system_logging' => false,
+    'system_logging' => [
+        'Turbo124\Collector\Jobs\System\CpuMetric',
+    ],
 
 
 ];

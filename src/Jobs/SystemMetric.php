@@ -29,5 +29,8 @@ class SystemMetric
     public function handle()
     {
 
+        foreach(config('collector.system_logging') as $sys_log)
+            $sys_log::dispatch();
+
     }
 }
