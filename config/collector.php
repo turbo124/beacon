@@ -35,6 +35,8 @@ return [
      */
     'system_logging' => [
         'Turbo124\Collector\Jobs\System\CpuMetric',
+        'Turbo124\Collector\Jobs\System\HdMetric',
+        'Turbo124\Collector\Jobs\System\MemMetric',
     ],
 
 
