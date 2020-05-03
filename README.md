@@ -31,8 +31,6 @@ Whilst not advised to do this in production due to the latency overhead, if your
 
 ``` php
 
-use Turbo124\Collector\CollectorFacade as Collector;
-
 LightLogs::create(new GenericCounter())
         ->increment()
         ->send();
@@ -41,8 +39,6 @@ LightLogs::create(new GenericCounter())
 A better way to handle jobs that need to be fired immediately without blocking would be to use the ->queue() method which will dispatch a Job onto the applications queue
 
 ``` php
-
-use Turbo124\Collector\CollectorFacade as Collector;
 
 LightLogs::create(new GenericCounter())
         ->increment()

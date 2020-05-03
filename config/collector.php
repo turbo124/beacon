@@ -28,4 +28,12 @@ return [
      */
     'cache_key' => 'collector',
 
+    /**
+     * Determines whether to log the 
+     * host system variables using
+     * the built in metrics.
+     */
+    'system_logging' => false,
+
+
 ];
