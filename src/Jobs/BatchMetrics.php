@@ -29,6 +29,8 @@ class BatchMetrics
      */
     public function handle()
     {
+        SystemMetric::dispatch();
+        
         $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric'];
 
         foreach($metric_types as $type)
@@ -44,6 +46,5 @@ class BatchMetrics
             Cache::put(config('collector.cache_key') . '_' . $type, []);
         }
 
-        SystemMetric::dispatch();
     }
 }
