@@ -35,7 +35,7 @@ class HdMetric
         $hdd_free = round(disk_free_space("/"), 2);
         $hdd_total = round(disk_total_space("/"), 2);
 
-        $$hdd_used = $hdd_total - $hdd_free;
+        $hdd_used = $hdd_total - $hdd_free;
         $hdd_percent = round(sprintf('%.2f',($hdd_used / $hdd_total) * 100), 2);
 
         $metric = new GenericMultiMetric();
