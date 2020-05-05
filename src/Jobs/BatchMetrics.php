@@ -29,7 +29,7 @@ class BatchMetrics
      */
     public function handle()
     {
-        SystemMetric::dispatch();
+        SystemMetric::dispatchNow();
         
         $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric'];
 

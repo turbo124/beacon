@@ -30,7 +30,7 @@ class SystemMetric
     {
 
         foreach(config('collector.system_logging') as $sys_log)
-            $sys_log::dispatch();
+            $sys_log::dispatchNow();
 
     }
 }
