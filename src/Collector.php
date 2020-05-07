@@ -47,7 +47,7 @@ class Collector
     public function send()
     {
         
-        if(!config('collector.enabled') || empty(config('collector.api_key')))
+        if(!config('beacon.enabled') || empty(config('beacon.api_key')))
             return;
 
         $generator = (new Generator())->fire($this->metric);
@@ -57,7 +57,7 @@ class Collector
     public function queue()
     {
 
-        if(!config('collector.enabled') || empty(config('collector.api_key')))
+        if(!config('beacon.enabled') || empty(config('beacon.api_key')))
             return;
         
         CreateMetric::dispatch($this->metric);
@@ -67,10 +67,10 @@ class Collector
     public function batch()
     {
 
-        if(!config('collector.enabled') || empty(config('collector.api_key')))
+        if(!config('beacon.enabled') || empty(config('beacon.api_key')))
             return;
 
-        $data = Cache::get(config('collector.cache_key') . '_' . $this->metric->type);
+        $data = Cache::get(config('beacon.cache_key') . '_' . $this->metric->type);
 
         if(is_array($data)){
             $data[] = $this->metric;
@@ -80,7 +80,7 @@ class Collector
             $data[] = $this->metric;
         }
 
-        Cache::put(config('collector.cache_key') . '_' . $this->metric->type, $data);
+        Cache::put(config('beacon.cache_key') . '_' . $this->metric->type, $data);
 
     }
 }

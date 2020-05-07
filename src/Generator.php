@@ -14,7 +14,7 @@ class Generator
 	 */
 	private function endPoint($uri)
 	{
-		return config('collector.endpoint')."/{$uri}/batch";
+		return config('beacon.endpoint')."/{$uri}/batch";
 	}
 
 	/**
@@ -25,7 +25,7 @@ class Generator
 	 */
 	private function apiKey()
 	{
-		return config('collector.api_key');
+		return config('beacon.api_key');
 	}
 
 	/**

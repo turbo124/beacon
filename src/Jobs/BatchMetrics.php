@@ -35,7 +35,7 @@ class BatchMetrics
 
         foreach($metric_types as $type)
         {
-            $metrics = Cache::get(config('collector.cache_key') . '_' . $type);
+            $metrics = Cache::get(config('beacon.cache_key') . '_' . $type);
       
             if(!is_array($metrics))
                 return;
@@ -43,7 +43,7 @@ class BatchMetrics
             $generator = new Generator();
             $generator->batchFire($metrics);
 
-            Cache::put(config('collector.cache_key') . '_' . $type, []);
+            Cache::put(config('beacon.cache_key') . '_' . $type, []);
         }
 
     }
