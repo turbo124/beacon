@@ -12,7 +12,7 @@ This client is part of the LightLogs application framework which enables ingesti
 You can install the package via composer:
 
 ```bash
-composer require turbo124/collector
+composer require turbo124/beacon
 ```
 
 ## Usage
