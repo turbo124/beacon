@@ -3,6 +3,7 @@
 namespace Turbo124\Collector\Collector;
 
 use Turbo124\Collector\Collector;
+use GuzzleHttp\Exception\RequestException;
 
 class Generator
 {
@@ -53,8 +54,15 @@ class Generator
 		$data['metrics'][] = $metric;
 
 		$client = $this->httpClient();	
-		$response = $client->request('POST',$this->endPoint($data['metrics'][0]->type), ['form_params' => $data]);
-		return $this->handleResponse($response);
+
+		try {
+
+			$client->request('POST',$this->endPoint($data['metrics'][0]->type), ['form_params' => $data]);
+
+		} catch (RequestException $e) {
+
+		}
+
 	}
 
 	/**
@@ -71,27 +79,17 @@ class Generator
 		$data['metrics'] = $metric_array;
 
 		$client = $this->httpClient();	
-		$response = $client->request('POST',$this->endPoint($metric_array[0]->type), ['form_params' => $data]);
-		return $this->handleResponse($response);
-	}
 
-	/**
-	 * Collector API response
-	 * 
-	 * @param  Response $response The API Collector response
-	 * @return @todo need to handle failures gracefully here - the queues will retry if there is a failure so no need to respool
-	 */
-	private function handleResponse($response)
-	{
-		switch ($response->getStatusCode()) {
-			case 200:
-				# code...
-				break;
-			
-			default:
+		try {
 
-				break;
+			$response = $client->request('POST',$this->endPoint($metric_array[0]->type), ['form_params' => $data]);
+
+		} catch (RequestException $e) {
+
 		}
+		
 	}
+
+
 
 }
