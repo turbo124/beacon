@@ -1,8 +1,8 @@
 <?php
 
-namespace Turbo124\Collector\Collector;
+namespace Turbo124\Beacon\Collector;
 
-use Turbo124\Collector\Collector;
+use Turbo124\Beacon\Collector;
 use GuzzleHttp\Exception\RequestException;
 
 class Generator

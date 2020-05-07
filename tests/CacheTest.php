@@ -1,12 +1,12 @@
 <?php
 
-namespace Turbo124\Collector\Tests;
+namespace Turbo124\Beacon\Tests;
 
 use Illuminate\Support\Facades\Cache;
 use Orchestra\Testbench\TestCase;
-use Turbo124\Collector\Collector;
-use Turbo124\Collector\CollectorServiceProvider;
-use Turbo124\Collector\Collector\Generator;
+use Turbo124\Beacon\Collector;
+use Turbo124\Beacon\CollectorServiceProvider;
+use Turbo124\Beacon\Beacon\Generator;
 
 class CacheTest extends TestCase
 {

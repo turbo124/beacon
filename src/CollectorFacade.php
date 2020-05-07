@@ -1,11 +1,11 @@
 <?php
 
-namespace Turbo124\Collector;
+namespace Turbo124\Beacon;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Turbo124\Collector\Skeleton\SkeletonClass
+ * @see \Turbo124\Beacon\Skeleton\SkeletonClass
  */
 class CollectorFacade extends Facade
 {

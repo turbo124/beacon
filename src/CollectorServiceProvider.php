@@ -1,11 +1,11 @@
 <?php
 
-namespace Turbo124\Collector;
+namespace Turbo124\Beacon;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
-use Turbo124\Collector\Collector;
-use Turbo124\Collector\Jobs\BatchMetrics;
+use Turbo124\Beacon\Collector;
+use Turbo124\Beacon\Jobs\BatchMetrics;
 
 class CollectorServiceProvider extends ServiceProvider
 {
@@ -23,7 +23,7 @@ class CollectorServiceProvider extends ServiceProvider
         }
 
         // \Illuminate\Support\Facades\Event::listen(
-        //     Turbo124\Collector\Events\MetricRegistered::class,
+        //     Turbo124\Beacon\Events\MetricRegistered::class,
         //     MyListener::class
         // );
     }

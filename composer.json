@@ -1,11 +1,13 @@
 {
-    "name": "turbo124/collector",
-    "description": "Application level data collector",
+    "name": "turbo124/beacon",
+    "description": "Application level data Beacon",
     "keywords": [
         "turbo124",
-        "collector"
+        "beacon",
+        "light logs",
+        "lightlogs"
     ],
-    "homepage": "https://github.com/turbo124/collector",
+    "homepage": "https://github.com/turbo124/beacon",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -26,12 +28,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Turbo124\\Collector\\": "src"
+            "Turbo124\\Beacon\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Turbo124\\Collector\\Tests\\": "tests"
+            "Turbo124\\Beacon\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -45,10 +47,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Turbo124\\Collector\\CollectorServiceProvider"
+                "Turbo124\\Beacon\\BeaconServiceProvider"
             ],
             "aliases": {
-                "Collector": "Turbo124\\Collector\\CollectorFacade"
+                "Beacon": "Turbo124\\Beacon\\BeaconFacade"
             }
         }
     }

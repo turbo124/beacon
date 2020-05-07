@@ -1,10 +1,10 @@
 <?php
 
-namespace Turbo124\Collector\Jobs;
+namespace Turbo124\Beacon\Jobs;
 
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Request;
-use Turbo124\Collector\Collector\Generator;
+use Turbo124\Beacon\Beacon\Generator;
 
 class CreateMetric
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Turbo124\Collector;
+namespace Turbo124\Beacon;
 
 use Illuminate\Support\Facades\Cache;
-use Turbo124\Collector\Collector\Generator;
-use Turbo124\Collector\Jobs\CreateMetric;
+use Turbo124\Beacon\Beacon\Generator;
+use Turbo124\Beacon\Jobs\CreateMetric;
 
 class Collector
 {

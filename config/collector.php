@@ -34,9 +34,9 @@ return [
      * the built in metrics.
      */
     'system_logging' => [
-        'Turbo124\Collector\Jobs\System\CpuMetric',
-        'Turbo124\Collector\Jobs\System\HdMetric',
-        'Turbo124\Collector\Jobs\System\MemMetric',
+        'Turbo124\Beacon\Jobs\System\CpuMetric',
+        'Turbo124\Beacon\Jobs\System\HdMetric',
+        'Turbo124\Beacon\Jobs\System\MemMetric',
     ],
 
 

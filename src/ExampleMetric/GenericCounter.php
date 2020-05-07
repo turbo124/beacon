@@ -1,6 +1,6 @@
 <?php
 
-namespace Turbo124\Collector\ExampleMetric;
+namespace Turbo124\Beacon\ExampleMetric;
 
 class GenericCounter 
 {

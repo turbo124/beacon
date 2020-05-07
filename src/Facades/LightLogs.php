@@ -1,6 +1,6 @@
 <?php
 
-namespace Turbo124\Collector\Facades;
+namespace Turbo124\Beacon\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
