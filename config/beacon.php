@@ -3,7 +3,7 @@
 return [
 
     /**
-     * Enable or disable the collector
+     * Enable or disable the beacon
      */
     'enabled'   =>   true,
 
@@ -26,7 +26,7 @@ return [
      * The default key used to store
      * metrics for batching
      */
-    'cache_key' => 'collector',
+    'cache_key' => 'beacon',
 
     /**
      * Determines whether to log the 

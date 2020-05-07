@@ -17,7 +17,7 @@ class CollectorServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/collector.php' => config_path('collector.php'),
+                __DIR__.'/../config/beacon.php' => config_path('beacon.php'),
             ], 'config');
 
         }
@@ -34,7 +34,7 @@ class CollectorServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/collector.php', 'collector');
+        $this->mergeConfigFrom(__DIR__.'/../config/beacon.php', 'beacon');
 
         // Register the main class to use with the facade
         $this->app->singleton('collector', function () {
