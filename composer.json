@@ -1,6 +1,6 @@
 {
     "name": "turbo124/beacon",
-    "description": "Application level data Beacon",
+    "description": "Application level data collector package for laravel",
     "keywords": [
         "turbo124",
         "beacon",
@@ -47,10 +47,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Turbo124\\Beacon\\BeaconServiceProvider"
+                "Turbo124\\Beacon\\CollectorServiceProvider"
             ],
             "aliases": {
-                "Beacon": "Turbo124\\Beacon\\BeaconFacade"
+                "Beacon": "Turbo124\\Beacon\\CollectorFacade"
             }
         }
     }
