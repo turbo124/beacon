@@ -3,7 +3,7 @@
 namespace Turbo124\Beacon;
 
 use Illuminate\Support\Facades\Cache;
-use Turbo124\Beacon\Beacon\Generator;
+use Turbo124\Beacon\Generator;
 use Turbo124\Beacon\Jobs\CreateMetric;
 
 class Collector

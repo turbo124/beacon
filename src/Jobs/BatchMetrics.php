@@ -5,7 +5,7 @@ namespace Turbo124\Beacon\Jobs;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Turbo124\Beacon\Beacon\Generator;
+use Turbo124\Beacon\Generator;
 use Turbo124\Beacon\Jobs\SystemMetric;
 
 class BatchMetrics

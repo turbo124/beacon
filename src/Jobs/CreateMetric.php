@@ -4,7 +4,7 @@ namespace Turbo124\Beacon\Jobs;
 
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Request;
-use Turbo124\Beacon\Beacon\Generator;
+use Turbo124\Beacon\Generator;
 
 class CreateMetric
 {
