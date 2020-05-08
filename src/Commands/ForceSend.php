@@ -23,7 +23,7 @@ class ForceSend extends Command
 
     public function handle()
     {
-        $this->logMessage(date('Y-m-d h:i:s') . ' Sending Data');
+        $this->logMessage('Sending Data');
 
         $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric'];
 
@@ -44,5 +44,12 @@ class ForceSend extends Command
         }
 
         $this->logMessage("I have " . count($metrics) . "pending to be sent");
+    }
+
+    private function logMessage($str)
+    {
+        $str = date('Y-m-d h:i:s') . ' ' . $str;
+        $this->info($str);
+        $this->log .= $str . "\n";
     }
 }
