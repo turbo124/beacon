@@ -4,6 +4,7 @@ namespace Turbo124\Beacon\Commands;
 
 use App;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 use Turbo124\Beacon\Jobs\BatchMetrics;
 
 
@@ -19,7 +20,7 @@ class ForceSend extends Command
      */
     protected $description = 'Forces the beacon queue to send data to the endpoint.';
 
-
+    protected $log = '';
 
     public function handle()
     {
@@ -30,9 +31,11 @@ class ForceSend extends Command
         foreach($metric_types as $type)
         {
             $metrics = Cache::get(config('beacon.cache_key') . '_' . $type);
-        }
 
-        $this->logMessage("I have " . count($metrics) . "pending to be sent");
+            if(is_array($metrics))
+                $this->logMessage("I have " . count($metrics) . "pending to be sent");
+
+        }
 
         BatchMetrics::dispatchNow();
 
@@ -41,9 +44,13 @@ class ForceSend extends Command
         foreach($metric_types as $type)
         {
             $metrics = Cache::get(config('beacon.cache_key') . '_' . $type);
+
+            if(is_array($metrics))
+                $this->logMessage("I have " . count($metrics) . "pending to be sent");
         }
 
-        $this->logMessage("I have " . count($metrics) . "pending to be sent");
+
+        
     }
 
     private function logMessage($str)

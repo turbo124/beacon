@@ -38,7 +38,7 @@ class BatchMetrics
             $metrics = Cache::get(config('beacon.cache_key') . '_' . $type);
       
             if(!is_array($metrics))
-                return;
+                continue;
             
             $generator = new Generator();
             $generator->batchFire($metrics);
