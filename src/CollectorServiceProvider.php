@@ -5,6 +5,7 @@ namespace Turbo124\Beacon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
 use Turbo124\Beacon\Collector;
+use Turbo124\Beacon\Commands\ForceSend;
 use Turbo124\Beacon\Jobs\BatchMetrics;
 
 class CollectorServiceProvider extends ServiceProvider
@@ -22,10 +23,11 @@ class CollectorServiceProvider extends ServiceProvider
 
         }
 
-        // \Illuminate\Support\Facades\Event::listen(
-        //     Turbo124\Beacon\Events\MetricRegistered::class,
-        //     MyListener::class
-        // );
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                ForceSend::class,
+            ]);
+        }
     }
 
     /**
