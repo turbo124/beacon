@@ -39,5 +39,11 @@ return [
         'Turbo124\Beacon\Jobs\System\MemMetric',
     ],
 
+    'database' => [
+        'mysql' => [
+            'master' => 'master_connection',
+            'slave' => 'slave_connection',
+        ],
+    ],
 
 ];
