@@ -17,6 +17,10 @@ class Generator
 		return config('beacon.endpoint')."/{$uri}/batch";
 	}
 
+	private function alertEndPoint()
+	{
+		return config('beacon.endpoint')."/alert";
+	}
 	/**
 	 * The API key used to communicate with 
 	 * the collector.
@@ -62,6 +66,21 @@ class Generator
 
 		}
 
+	}
+
+	public function alert($metric)
+	{
+		$data['metrics'][] = $metric;
+
+		$client = $this->httpClient();	
+
+		try {
+
+			$client->request('POST',$this->alertEndPoint(), ['form_params' => $data]);
+
+		} catch (RequestException $e) {
+
+		}
 	}
 
 	/**

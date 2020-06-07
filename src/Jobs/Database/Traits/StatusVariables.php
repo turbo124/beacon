@@ -2,6 +2,8 @@
 
 namespace Turbo124\Beacon\Jobs\Database\Traits;
 
+use Illuminate\Support\Facades\DB;
+
 trait StatusVariables
 {
 
@@ -37,6 +39,18 @@ trait StatusVariables
 
 		});
 
+	}
+
+	public function checkDbConnection() :bool
+	{
+		try{
+			DB::connection()->getPdo();
+		}
+		catch (\Exception $e) {
+			return false;
+        }
+
+        return true;
 	}
 
 }

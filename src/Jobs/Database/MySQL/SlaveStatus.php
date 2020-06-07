@@ -37,6 +37,9 @@ class SlaveStatus
 
         $variables = $this->getSlaveVariables();
 
+        if(!$variables)
+            return;
+
         $metric = new GenericMixedMetric();
         $metric->name = 'database.slave_status';
         $metric->string_metric5 = $variables->Master_Host; 
