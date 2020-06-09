@@ -17,6 +17,8 @@ class Collector
 
     public function create($metric)
     {
+        date_default_timezone_set('UTC');
+
         $this->metric = $metric;
         $this->metric->datetime = date("Y-m-d H:i:s");
 

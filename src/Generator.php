@@ -14,12 +14,12 @@ class Generator
 	 */
 	private function endPoint($uri)
 	{
-		return config('beacon.endpoint')."/{$uri}/batch";
+		return config('beacon.endpoint') . "/{$uri}/batch";
 	}
 
 	private function alertEndPoint()
 	{
-		return config('beacon.endpoint')."/alert";
+		return config('beacon.endpoint') . "/alert";
 	}
 	/**
 	 * The API key used to communicate with 
@@ -104,6 +104,7 @@ class Generator
 
 		} catch (RequestException $e) {
 
+			info($e->getMessage());
 		}
 		
 	}
