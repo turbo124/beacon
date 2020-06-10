@@ -6,8 +6,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Turbo124\Beacon\Collector;
-use Turbo124\Beacon\Generator;
+use Turbo124\Beacon\ExampleMetric\GenericGauge;
 use Turbo124\Beacon\ExampleMetric\GenericMixedMetric;
+use Turbo124\Beacon\Generator;
 use Turbo124\Beacon\Jobs\Database\Traits\StatusVariables;
 
 class DbStatus
@@ -42,9 +43,8 @@ class DbStatus
      */
     public function handle()
     {
-        $db_connection = config($this->connection);
 
-        config(['database.default' => $db_connection]);
+        config(['database.default' => $this->connection]);
         $db_status = $this->checkDbConnection();
 
         $metric = new GenericGauge();
@@ -55,8 +55,7 @@ class DbStatus
         $collector->create($metric);
 
         if($this->force_send || !$db_status){ //if there is no DB connection, then we MUST fire immediately!!
-            $collector->fire();
-            $collector->alert();
+            $collector->send();
         }
         else
             $collector->batch();
