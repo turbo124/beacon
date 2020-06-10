@@ -52,13 +52,13 @@ class DbStatus
         $metric->name = $this->name;
         $metric->metric = (int)$db_status;
 
-        $collector = new Collector();
+        $collector = (new Collector());
 
         if($this->force_send || !$db_status){ //if there is no DB connection, then we MUST fire immediately!!
-            $collector->create($metric)->send();
+            (new Collector())->create($metric)->send();
         }
         else{
-            $collector->create($metric)->batch();
+            (new Collector())->create($metric)->batch();
         }
 
 
