@@ -45,6 +45,7 @@ class DbStatus
     {
 
         config(['database.default' => $this->connection]);
+
         $db_status = $this->checkDbConnection();
 
         $metric = new GenericGauge();
@@ -52,13 +53,14 @@ class DbStatus
         $metric->metric = (int)$db_status;
 
         $collector = new Collector();
-        $collector->create($metric);
 
         if($this->force_send || !$db_status){ //if there is no DB connection, then we MUST fire immediately!!
-            $collector->send();
+            $collector->create($metric)->send();
         }
-        else
-            $collector->batch();
+        else{
+            $collector->create($metric)->batch();
+        }
+
 
     }
 
