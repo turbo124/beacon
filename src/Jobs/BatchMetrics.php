@@ -29,6 +29,10 @@ class BatchMetrics
      */
     public function handle()
     {
+
+        if(!config('beacon.enabled') || empty(config('beacon.api_key')))
+            return;
+        
         SystemMetric::dispatchNow();
         
         $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric'];
