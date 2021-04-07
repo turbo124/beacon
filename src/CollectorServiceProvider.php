@@ -39,8 +39,12 @@ class CollectorServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/beacon.php', 'beacon');
 
         // Register the main class to use with the facade
-        $this->app->singleton('collector', function () {
-            return new Collector;
+        // $this->app->singleton('collector', function () {
+        //     return new Collector;
+        // });
+
+        $this->app->bind('collector', function (){
+           return new Collector; 
         });
 
         /* Register the scheduler */
