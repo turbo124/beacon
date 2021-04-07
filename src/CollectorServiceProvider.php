@@ -47,11 +47,13 @@ class CollectorServiceProvider extends ServiceProvider
            return new Collector; 
         });
 
-        /* Register the scheduler */
-        $this->app->booted(function () {
-            $schedule = app(Schedule::class);
-            $schedule->job(new BatchMetrics())->everyFiveMinutes();
-        });
-
+        if(config('beacon.enabled'))
+        {
+            /* Register the scheduler */
+            $this->app->booted(function () {
+                $schedule = app(Schedule::class);
+                $schedule->job(new BatchMetrics())->everyFiveMinutes();
+            });
+        }
     }
 }
