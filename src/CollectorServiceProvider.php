@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
 use Turbo124\Beacon\Collector;
 use Turbo124\Beacon\Commands\ForceSend;
+use Turbo124\Beacon\Commands\PurgeAnalytics;
 use Turbo124\Beacon\Jobs\BatchMetrics;
 
 class CollectorServiceProvider extends ServiceProvider
@@ -26,6 +27,7 @@ class CollectorServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 ForceSend::class,
+                PurgeAnalytics::class,
             ]);
         }
     }
