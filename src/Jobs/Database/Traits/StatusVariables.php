@@ -31,17 +31,7 @@ trait StatusVariables
 
         $db = DB::select(DB::raw("SHOW SLAVE STATUS"));
 
-        $obj = new \stdClass;
-
-        $new_obj = collect($db)->map(function($item) use($obj){
-
-	        $obj->{$item->Variable_name} = $item->Value;
-	  
-	        return $obj;
-
-		});
-
-        return $new_obj;
+        return $db[0];
 
 	}
 
