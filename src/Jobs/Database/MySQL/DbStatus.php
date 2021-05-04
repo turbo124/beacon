@@ -72,8 +72,7 @@ class DbStatus
             $metric->string_metric5 = $variables->Master_Host; 
             $metric->string_metric6 = $variables->Slave_IO_Running; 
             $metric->string_metric7 = $variables->Slave_SQL_Running; 
-            $metric->string_metric8 = $variables->Replicate_Do_DB; 
-            $metric->string_metric6 = $variables->Last_Error; 
+            $metric->string_metric8 = $variables->Last_Error; 
 
             $collector = new Collector();
             $collector->create($metric)
