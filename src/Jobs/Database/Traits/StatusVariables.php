@@ -14,15 +14,9 @@ trait StatusVariables
 
         $obj = new \stdClass;
 
-        $new_obj = collect($db)->map(function($item) use($obj){
+        $new_obj = collect($db)->map(function($item) use($obj){$obj->{$item->Variable_name} = $item->Value;return $obj;});
 
-	        $obj->{$item->Variable_name} = $item->Value;
-	  
-	        return $obj;
-
-		});
-
-        return $new_obj;
+        return $new_obj[0];
 
     }
 
