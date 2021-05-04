@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Turbo124\Beacon\Collector;
 use Turbo124\Beacon\ExampleMetric\GenericGauge;
 use Turbo124\Beacon\ExampleMetric\GenericMixedMetric;
+use Turbo124\Beacon\ExampleMetric\GenericMultiMetric;
 use Turbo124\Beacon\Generator;
 use Turbo124\Beacon\Jobs\Database\Traits\StatusVariables;
 
@@ -61,6 +62,42 @@ class DbStatus
             (new Collector())->create($metric)->batch();
         }
 
+        $variables = $this->getSlaveVariables();
+
+        if($variables)
+        {
+
+            $metric = new GenericMixedMetric();
+            $metric->name = 'database.slave_status.'.$this->connection;
+            $metric->string_metric5 = $variables->Master_Host; 
+            $metric->string_metric6 = $variables->Slave_IO_Running; 
+            $metric->string_metric7 = $variables->Slave_SQL_Running; 
+            $metric->string_metric8 = $variables->Replicate_Do_DB; 
+            $metric->string_metric6 = $variables->Last_Error; 
+
+            $collector = new Collector();
+            $collector->create($metric)
+            ->batch();
+
+        }
+
+        $status_variables = $this->getVariables();
+
+        if($status_variables)
+        {
+            $metric = new GenericMultiMetric();
+            $metric->name = 'database.performance.'.$this->connection;
+            $metric->metric1 = $status_variables->Innodb_data_read;
+            $metric->metric2 = $status_variables->Innodb_data_writes;
+            $metric->metric3 = $status_variables->Max_used_connections;
+            $metric->metric4 = $status_variables->Table_locks_immediate;
+            $metric->metric5 = $status_variables->Table_locks_waited;
+
+            
+            $collector = new Collector();
+            $collector->create($metric)
+            ->batch();
+        }
 
     }
 
