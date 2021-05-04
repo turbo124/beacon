@@ -22,6 +22,8 @@ trait StatusVariables
 
 		});
 
+        return $new_obj;
+
     }
 
 	public function getSlaveVariables()
@@ -38,6 +40,8 @@ trait StatusVariables
 	        return $obj;
 
 		});
+
+        return $new_obj;
 
 	}
 
