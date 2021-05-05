@@ -16,7 +16,10 @@ trait StatusVariables
 
         $new_obj = collect($db)->map(function($item) use($obj){$obj->{$item->Variable_name} = $item->Value;return $obj;});
 
-        return $new_obj[0];
+        if($new_obj->count() >=1)
+        	return $new_obj[0];
+
+        return false;
 
     }
 
@@ -25,7 +28,10 @@ trait StatusVariables
 
         $db = DB::select(DB::raw("SHOW SLAVE STATUS"));
 
-        return $db[0];
+        if(count($db) >=1)
+        	return $db[0];
+
+        return false;
 
 	}
 
