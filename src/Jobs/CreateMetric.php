@@ -10,7 +10,9 @@ class CreateMetric
 {
     use Dispatchable;
 
-    public $tries = 1;
+    public $tries = 3;
+
+    public $backoff = 3600;
 
     protected $metric;
 
