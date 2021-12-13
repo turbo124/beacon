@@ -10,6 +10,8 @@ class CreateMetric
 {
     use Dispatchable;
 
+    public $tries = 1;
+
     protected $metric;
 
     /**
