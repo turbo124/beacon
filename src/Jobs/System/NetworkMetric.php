@@ -55,10 +55,9 @@ class NetworkMetric
             $network_metric = end($interface->traffic->fiveminute);
 
             $metric = new GenericMultiMetric();
-            $metric->name = 'network.activity';
-            $metric->metric1 = $name; 
-            $metric->metric2 = $network_metric->rx; 
-            $metric->metric3 = $network_metric->tx; 
+            $metric->name = 'network.activity.'.$name;
+            $metric->metric1 = $network_metric->rx; 
+            $metric->metric2 = $network_metric->tx; 
             // $metric->metric4 = $stat['mem_percent']; 
 
             $collector = new Collector();
