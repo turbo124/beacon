@@ -13,6 +13,8 @@ class CpuMetric
 {
     use Dispatchable;
 
+    public $tries = 1;
+
     /**
      * Create a new job instance.
      *
