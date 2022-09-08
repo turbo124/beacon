@@ -37,7 +37,7 @@ class BatchMetrics implements ShouldQueue
         if(!config('beacon.enabled') || empty(config('beacon.api_key')))
             return;
         
-        SystemMetric::dispatchNow();
+        SystemMetric::dispatch();
         
         $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric'];
 
@@ -49,7 +49,15 @@ class BatchMetrics implements ShouldQueue
                 continue;
             
             $generator = new Generator();
-            $generator->batchFire($metrics);
+
+            $batch_of = 40;
+            $batch = array_chunk($metrics, $batch_of);
+
+            foreach($batch as $b) {
+
+                $generator->batchFire($b);
+
+            }
 
             Cache::put(config('beacon.cache_key') . '_' . $type, []);
         }
