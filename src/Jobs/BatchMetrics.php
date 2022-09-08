@@ -49,15 +49,7 @@ class BatchMetrics implements ShouldQueue
                 continue;
             
             $generator = new Generator();
-
-            $batch_of = 40;
-            $batch = array_chunk($metrics, $batch_of);
-
-            foreach($batch as $b) {
-
-                $generator->batchFire($b);
-
-            }
+            $generator->batchFire($metrics);
 
             Cache::put(config('beacon.cache_key') . '_' . $type, []);
         }

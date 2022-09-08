@@ -3,6 +3,7 @@
 namespace Turbo124\Beacon;
 
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise;
 
 class Generator
 {
@@ -94,13 +95,28 @@ class Generator
 		if(!is_array($metric_array) || count($metric_array) == 0)
 			return;
 		
-		$data['metrics'] = $metric_array;
+		// $data['metrics'] = $metric_array;
 
 		$client = $this->httpClient();	
 
 		try {
 
-			$response = $client->request('POST',$this->endPoint($metric_array[0]->type), ['form_params' => $data]);
+		 	//$response = $client->request('POST',$this->endPoint($metric_array[0]->type), ['form_params' => $data]);
+
+            $batch_of = 40;
+            $batch = array_chunk($metric_array, $batch_of);
+
+            /* Concurrency ++ */
+            foreach($batch as $key => $value) {
+
+            	$data['metrics'] = $value;
+
+				$promises = [
+				    $key => $client->requestAsync('POST',$this->endPoint($metric_array[0]->type), ['form_params' => $data])
+				];
+            }
+
+			$responses = Promise\Utils::unwrap($promises);
 
 		} catch (RequestException $e) {
 
