@@ -2,13 +2,18 @@
 
 namespace Turbo124\Beacon\Jobs;
 
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Request;
 use Turbo124\Beacon\Generator;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Bus\Dispatchable;
 
-class CreateMetric
+class CreateMetric implements ShouldQueue
 {
-    use Dispatchable;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
 
     public $tries = 3;
 

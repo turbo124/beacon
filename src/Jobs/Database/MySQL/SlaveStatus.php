@@ -2,17 +2,21 @@
 
 namespace Turbo124\Beacon\Jobs\Database\MySQL;
 
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Turbo124\Beacon\Collector;
 use Turbo124\Beacon\Generator;
 use Turbo124\Beacon\ExampleMetric\GenericMixedMetric;
-use Turbo124\Beacon\Jobs\Database\Traits\StatusVariables;
+use Turbo124\Beacon\Jobs\Database\Traits\StatusVariables; 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Bus\Dispatchable;
 
-class SlaveStatus
+class SlaveStatus implements ShouldQueue
 {
-    use Dispatchable, StatusVariables;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, StatusVariables;
 
     /**
      * Create a new job instance.

@@ -2,17 +2,21 @@
 
 namespace Turbo124\Beacon\Jobs\System;
 
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Turbo124\Beacon\Collector;
 use Turbo124\Beacon\Generator;
 use Turbo124\Beacon\ExampleMetric\GenericGauge;
-use Turbo124\Beacon\ExampleMetric\GenericMultiMetric;
+use Turbo124\Beacon\ExampleMetric\GenericMultiMetric; 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Bus\Dispatchable;
 
-class MemMetric
+class MemMetric implements ShouldQueue
 {
-    use Dispatchable;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
 
     public $tries = 1;

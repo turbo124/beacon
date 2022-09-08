@@ -2,7 +2,7 @@
 
 namespace Turbo124\Beacon\Tests;
 
-use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\TestCase;
 use Turbo124\Beacon\Collector;
 use Turbo124\Beacon\CollectorServiceProvider;
 use Turbo124\Beacon\Beacon\Generator;
