@@ -26,15 +26,15 @@ class DbStatus implements ShouldQueue
      * @return void
      */
 
-    private $connection;
+    private $db_connection;
 
     private $name;
     
     private $force_send;
 
-    public function __construct(string $connection, string $name, bool $force_send = false)
+    public function __construct(string $db_connection, string $name, bool $force_send = false)
     {
-        $this->connection = $connection;
+        $this->db_connection = $db_connection;
 
         $this->name = $name;
 
@@ -49,7 +49,7 @@ class DbStatus implements ShouldQueue
     public function handle()
     {
 
-        config(['database.default' => $this->connection]);
+        config(['database.default' => $this->db_connection]);
 
         $db_status = $this->checkDbConnection();
 
@@ -72,7 +72,7 @@ class DbStatus implements ShouldQueue
         {
 
             $metric = new GenericMixedMetric();
-            $metric->name = 'database.slave_status.'.$this->connection;
+            $metric->name = 'database.slave_status.'.$this->db_connection;
             $metric->string_metric5 = $variables->Master_Host; 
             $metric->string_metric6 = $variables->Slave_IO_Running; 
             $metric->string_metric7 = $variables->Slave_SQL_Running; 
@@ -89,7 +89,7 @@ class DbStatus implements ShouldQueue
         if($status_variables)
         {
             $metric = new GenericMultiMetric();
-            $metric->name = 'database.performance.'.$this->connection;
+            $metric->name = 'database.performance.'.$this->db_connection;
             $metric->metric1 = $status_variables->Innodb_data_read;
             $metric->metric2 = $status_variables->Innodb_data_writes;
             $metric->metric3 = $status_variables->Max_used_connections;
