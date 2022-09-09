@@ -106,17 +106,29 @@ class Generator
             $batch_of = 40;
             $batch = array_chunk($metric_array, $batch_of);
 
+			$x = 1;
+
             /* Concurrency ++ */
-            foreach($batch as $key => $value) {
+            foreach($batch as $key => $value) {	
 
             	$data['metrics'] = $value;
 
 				$promises = [
 				    $key => $client->requestAsync('POST',$this->endPoint($metric_array[0]->type), ['form_params' => $data])
 				];
+
+				$x++;
+
+				if($x >= 10) {
+					$x = 1;
+					$this->sendPromise($promises);
+				}
+
             }
 
-			$responses = Promise\Utils::unwrap($promises);
+			// $responses = Promise\Utils::unwrap($promises);
+
+
 
 		} catch (RequestException $e) {
 
@@ -125,6 +137,11 @@ class Generator
 		
 	}
 
+	private function sendPromise($promises)
+	{
+		$responses = Promise\Utils::unwrap($promises);
+		// $responses = Promise\Utils::settle($promises)->wait();
 
+	}
 
 }
