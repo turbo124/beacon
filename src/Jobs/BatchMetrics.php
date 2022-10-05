@@ -47,11 +47,12 @@ class BatchMetrics implements ShouldQueue
       
             if(!is_array($metrics))
                 continue;
+
+            Cache::put(config('beacon.cache_key') . '_' . $type, []);
             
             $generator = new Generator();
             $generator->batchFire($metrics);
 
-            Cache::put(config('beacon.cache_key') . '_' . $type, []);
         }
 
     }

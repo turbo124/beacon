@@ -95,13 +95,9 @@ class Generator
 		if(!is_array($metric_array) || count($metric_array) == 0)
 			return;
 		
-		// $data['metrics'] = $metric_array;
-
 		$client = $this->httpClient();	
 
 		try {
-
-		 	//$response = $client->request('POST',$this->endPoint($metric_array[0]->type), ['form_params' => $data]);
 
             $batch_of = 40;
             $batch = array_chunk($metric_array, $batch_of);
@@ -126,13 +122,10 @@ class Generator
 
             }
 
-			// $responses = Promise\Utils::unwrap($promises);
-
-
 
 		} catch (RequestException $e) {
 
-			info($e->getMessage());
+			// info($e->getMessage());
 		}
 		
 	}
@@ -140,8 +133,6 @@ class Generator
 	private function sendPromise($promises)
 	{
 		$responses = Promise\Utils::unwrap($promises);
-		// $responses = Promise\Utils::settle($promises)->wait();
-
 	}
 
 }
