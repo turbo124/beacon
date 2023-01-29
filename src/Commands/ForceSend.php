@@ -37,7 +37,7 @@ class ForceSend extends Command
 
         }
 
-        BatchMetrics::dispatchNow();
+         (new BatchMetrics())->handle();
 
         $this->logMessage(date('Y-m-d h:i:s') . ' Sent Data!!');
 

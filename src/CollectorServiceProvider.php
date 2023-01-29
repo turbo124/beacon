@@ -54,7 +54,7 @@ class CollectorServiceProvider extends ServiceProvider
             /* Register the scheduler */
             $this->app->booted(function () {
                 $schedule = app(Schedule::class);
-                $schedule->job(new BatchMetrics())->everyFiveMinutes();
+                $schedule->job(new BatchMetrics())->everyFiveMinutes()->withoutOverlapping()->name('beacon-batch-job')->onOneServer();
             });
         }
     }
