@@ -67,6 +67,9 @@ class BatchMetrics implements ShouldQueue
                 continue;
             }
 
+            foreach($metrics as $key => $value)
+                $metrics[$key] = unserialize($value);
+
             $generator = new Generator();
 
             $generator->batchFire($metrics); 
