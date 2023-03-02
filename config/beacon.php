@@ -29,6 +29,11 @@ return [
     'cache_key' => 'beacon',
 
     /**
+     * Configure you cache connection here
+     */
+    'cache_connection' => '',
+
+    /**
      * Determines whether to log the 
      * host system variables using
      * the built in metrics.

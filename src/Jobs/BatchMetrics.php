@@ -2,8 +2,6 @@
 
 namespace Turbo124\Beacon\Jobs;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Turbo124\Beacon\Generator;
 use Turbo124\Beacon\Jobs\SystemMetric;
 use Illuminate\Bus\Queueable;
@@ -11,10 +9,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades;
 
 class BatchMetrics implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -33,27 +35,41 @@ class BatchMetrics implements ShouldQueue
      */
     public function handle()
     {
-
-        if(!config('beacon.enabled') || empty(config('beacon.api_key')))
+        if (!config('beacon.enabled') || empty(config('beacon.api_key'))) {
             return;
-        
-        SystemMetric::dispatch();
-        
-        $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric'];
-
-        foreach($metric_types as $type)
-        {
-            $metrics = Cache::get(config('beacon.cache_key') . '_' . $type);
-      
-            if(!is_array($metrics))
-                continue;
-
-            Cache::put(config('beacon.cache_key') . '_' . $type, []);
-            
-            $generator = new Generator();
-            $generator->batchFire($metrics);
-
         }
 
+        SystemMetric::dispatch();
+
+        $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric'];
+
+        foreach ($metric_types as $type) {
+
+            $redis = Facades\Redis::connection(config('beacon.cache_connection',''));
+
+            $prefix = config('cache.prefix').':'.config('beacon.cache_key').$type.'*';
+
+            $keys = $redis->keys($prefix);
+
+            $metrics = false;
+
+            if (count($keys) > 0) {
+                $metrics = $redis->mget($keys);
+
+                $redis->pipeline(function ($pipe) use ($keys) {
+                    foreach ($keys as $key) {
+                        $pipe->del($key);
+                    }
+                });
+            }
+
+            if (!is_array($metrics)) {
+                continue;
+            }
+
+            $generator = new Generator();
+
+            $generator->batchFire($metrics); 
+        }
     }
 }

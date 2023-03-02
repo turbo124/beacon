@@ -2,11 +2,9 @@
 
 namespace Turbo124\Beacon\Commands;
 
-use App;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Cache;
 use Turbo124\Beacon\Jobs\BatchMetrics;
-
+use Illuminate\Support\Facades;
 
 class ForceSend extends Command
 {
@@ -30,7 +28,11 @@ class ForceSend extends Command
 
         foreach($metric_types as $type)
         {
-            $metrics = Cache::get(config('beacon.cache_key') . '_' . $type);
+            $redis = Facades\Redis::connection(config('beacon.cache_connection',''));
+
+            $prefix = config('cache.prefix').':'.config('beacon.cache_key').$type.'*';
+
+            $metrics = $redis->keys($prefix);
 
             if(is_array($metrics))
                 $this->logMessage("I have " . count($metrics) . "pending to be sent");
@@ -43,7 +45,11 @@ class ForceSend extends Command
 
         foreach($metric_types as $type)
         {
-            $metrics = Cache::get(config('beacon.cache_key') . '_' . $type);
+            $redis = Facades\Redis::connection(config('beacon.cache_connection',''));
+
+            $prefix = config('cache.prefix').':'.config('beacon.cache_key').$type.'*';
+
+            $metrics = $redis->keys($prefix);
 
             if(is_array($metrics))
                 $this->logMessage("I have " . count($metrics) . "pending to be sent");
