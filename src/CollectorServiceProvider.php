@@ -2,12 +2,13 @@
 
 namespace Turbo124\Beacon;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Support\ServiceProvider;
 use Turbo124\Beacon\Collector;
-use Turbo124\Beacon\Commands\ForceSend;
-use Turbo124\Beacon\Commands\PurgeAnalytics;
 use Turbo124\Beacon\Jobs\BatchMetrics;
+use Illuminate\Support\ServiceProvider;
+use Turbo124\Beacon\Commands\ForceSend;
+use Turbo124\Beacon\Commands\CountMetrics;
+use Illuminate\Console\Scheduling\Schedule;
+use Turbo124\Beacon\Commands\PurgeAnalytics;
 
 class CollectorServiceProvider extends ServiceProvider
 {
@@ -28,6 +29,7 @@ class CollectorServiceProvider extends ServiceProvider
             $this->commands([
                 ForceSend::class,
                 PurgeAnalytics::class,
+                CountMetrics::class,
             ]);
         }
     }
