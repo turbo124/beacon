@@ -6,29 +6,28 @@ use App;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades;
 
-class PurgeAnalytics extends Command
+class CountMetrics extends Command
 {
     /**
      * @var string
      */
-    protected $name = 'beacon:purge';
+    protected $name = 'beacon:count';
 
     /**
      * @var string
      */
-    protected $description = 'Purging any analytics in the cache';
+    protected $description = 'Counting any analytics in the cache';
 
     protected $log = '';
 
     public function handle()
     {
-        $this->logMessage('Purging Data');
+        $this->logMessage('Counting metrics');
             
         $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric'];
 
         foreach ($metric_types as $type) {
 
-            $this->logMessage("purging {$type}");
             
             $redis = Facades\Redis::connection(config('beacon.cache_connection',''));
 
@@ -36,17 +35,11 @@ class PurgeAnalytics extends Command
 
             $keys = $redis->keys($prefix);
 
-            if (count($keys) > 0) {
-                $redis->pipeline(function ($pipe) use ($keys) {
-                    foreach ($keys as $key) {
-                        $pipe->del($key);
-                    }
-                });
-            }
+            $this->logMessage("{$type} - ".count($keys)." keys");
 
         }
 
-        $this->logMessage('Finished Purging Data');
+        $this->logMessage('Finished Counting metrics');
 
     }
 

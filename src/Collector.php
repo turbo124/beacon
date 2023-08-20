@@ -72,7 +72,7 @@ class Collector
         if(!config('beacon.enabled') || empty(config('beacon.api_key')))
             return;
 
-        Cache::put(config('beacon.cache_key') . $this->metric->type.microtime(true), $this->metric);
+        Cache::put(config('beacon.cache_key') . $this->metric->type.microtime(true), $this->metric, 1800);
 
     }
 }
