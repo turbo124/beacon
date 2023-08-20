@@ -72,16 +72,6 @@ class Collector
         if(!config('beacon.enabled') || empty(config('beacon.api_key')))
             return;
 
-        // $data = Cache::get(config('beacon.cache_key') . '_' . $this->metric->type);
-
-        // if(is_array($data)){
-        //     $data[] = $this->metric;
-        // }
-        // else {
-        //     $data = [];
-        //     $data[] = $this->metric;
-        // }
-
         Cache::put(config('beacon.cache_key') . $this->metric->type.microtime(true), $this->metric);
 
     }
