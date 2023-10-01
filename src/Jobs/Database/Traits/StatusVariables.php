@@ -1,6 +1,6 @@
 <?php
 
-namespace Lightlogs\Beacon\Jobs\Database\Traits;
+namespace Turbo124\Beacon\Jobs\Database\Traits;
 
 use Illuminate\Support\Facades\DB;
 
