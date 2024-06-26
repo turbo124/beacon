@@ -4,9 +4,12 @@ namespace Turbo124\Beacon;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise;
+use Psr\Http\Message\{RequestInterface, ResponseInterface};
+use GuzzleHttp\{Client, HandlerStack, Middleware, RetryMiddleware};
 
 class Generator
 {
+
 	/**
 	 * The Collector Endpoint where
 	 * we send our data to be injested
@@ -39,7 +42,35 @@ class Generator
 	 */
 	private function httpClient()
 	{
-		return new \GuzzleHttp\Client(['headers' => 
+		
+		$maxRetries = 3;
+
+
+		$decider = function (int $retries, RequestInterface $request, ResponseInterface $response = null) use ($maxRetries): bool {
+			return
+				$retries < $maxRetries
+				&& null !== $response
+				&& 429 === $response->getStatusCode();
+		};
+
+		$delay = function (int $retries, ResponseInterface $response): int {
+			if (!$response->hasHeader('Retry-After')) {
+				return RetryMiddleware::exponentialDelay($retries);
+			}
+
+			$retryAfter = $response->getHeaderLine('Retry-After');
+
+			if (!is_numeric($retryAfter)) {
+				$retryAfter = (new \DateTime($retryAfter))->getTimestamp() - time();
+			}
+
+			return (int) $retryAfter * 1000;
+		};
+
+		$stack = HandlerStack::create();
+		$stack->push(Middleware::retry($decider, $delay));
+
+		return new \GuzzleHttp\Client(['handler'  => $stack, 'headers' => 
 			[ 
 		    'Authorization' => 'Bearer ' . $this->apiKey(),        
 		    'Accept'        => 'application/json'
