@@ -32,7 +32,7 @@ class PurgeAnalytics extends Command
             
             $redis = Facades\Redis::connection(config('beacon.cache_connection',''));
 
-            $prefix = config('cache.prefix').':'.config('beacon.cache_key').$type.'*';
+            $prefix = config('cache.prefix').config('beacon.cache_key').$type.'*';
 
             $keys = $redis->keys($prefix);
 
