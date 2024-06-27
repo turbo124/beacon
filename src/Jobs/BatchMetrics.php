@@ -18,6 +18,8 @@ class BatchMetrics implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    public $timeout = 3600;
+
     /**
      * Create a new job instance.
      *
