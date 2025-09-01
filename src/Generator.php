@@ -119,7 +119,7 @@ class Generator
 	 * Sends a batch of metrics to the collector
 	 * 
 	 * @param  array $metric_array  Array of metric objects
-	 * @return void              
+	 *             
 	 */
 	public function batchFire($metric_array)
 	{

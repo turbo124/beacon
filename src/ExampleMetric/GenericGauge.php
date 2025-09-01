@@ -28,7 +28,7 @@ class GenericGauge
 	 *
 	 * date("Y-m-d H:i:s")
 	 * 
-	 * @var DateTime 
+	 * @var \DateTime 
 	 */
 	public $datetime;
 

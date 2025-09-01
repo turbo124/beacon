@@ -68,13 +68,6 @@ class Collector
 
     public function probe($request, string $ip, bool $ban = false): self
     {
-        // if($request->method() != 'GET')
-        //     return $this;
-
-        // if($ban && \Turbo124\Beacon\Jobs\Probe::find(urldecode($request->path()))){
-        //     //write to denylist, and queue a reload
-        // }
-
         return $this;
     }
 

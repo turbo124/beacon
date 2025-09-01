@@ -26,8 +26,8 @@ class GenericCounter
 	 * The datetime of the counter measurement
 	 *
 	 * date("Y-m-d H:i:s")
-	 * 
-	 * @var DateTime 
+	 *
+	 * @var \DateTime
 	 */
 	public $datetime;
 
