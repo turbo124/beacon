@@ -43,7 +43,7 @@ class BatchMetrics implements ShouldQueue
 
         SystemMetric::dispatch();
 
-        $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric'];
+        $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric', 'structured_metric'];
 
         foreach ($metric_types as $type) {
 
