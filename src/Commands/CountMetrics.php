@@ -24,7 +24,7 @@ class CountMetrics extends Command
     {
         $this->logMessage('Counting metrics');
             
-        $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric'];
+        $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric', 'structured_metric'];
 
         foreach ($metric_types as $type) {
 
