@@ -58,7 +58,7 @@ class BatchMetrics implements ShouldQueue
             if (count($keys) > 0) {
                 $metrics = $redis->mget($keys);
 
-                $redis->pipeline(function ($pipe) use ($keys) {
+                $redis->pipeline(function ($pipe) use ($keys) { //@phpstan-ignore-line
                     foreach ($keys as $key) {
                         $pipe->del($key);
                     }

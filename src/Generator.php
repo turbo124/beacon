@@ -82,7 +82,7 @@ class Generator
 	 * Sends a single metric to the collector
 	 * 
 	 * @param  object $metric The user defined metric object
-	 * @return void
+	 * 
 	 */
 	public function fire($metric)
 	{
@@ -118,7 +118,7 @@ class Generator
 	/**
 	 * Sends a batch of metrics to the collector
 	 * 
-	 * @param  array $metric_array  Array of metric objects
+	 * @param  ?array $metric_array  Array of metric objects
 	 *             
 	 */
 	public function batchFire($metric_array)

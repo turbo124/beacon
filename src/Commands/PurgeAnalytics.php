@@ -37,7 +37,7 @@ class PurgeAnalytics extends Command
             $keys = $redis->keys($prefix);
 
             if (count($keys) > 0) {
-                $redis->pipeline(function ($pipe) use ($keys) {
+                $redis->pipeline(function ($pipe) use ($keys) { //@phpstan-ignore-line
                     foreach ($keys as $key) {
                         $pipe->del($key);
                     }

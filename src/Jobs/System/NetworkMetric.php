@@ -37,6 +37,8 @@ class NetworkMetric implements ShouldQueue
      */
     public function handle()
     {
+        $stream = '';
+        
         $vnstat = popen("vnstat --json", 'r');
 
         if (is_resource($vnstat)) 

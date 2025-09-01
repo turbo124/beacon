@@ -36,7 +36,7 @@ class RedisStatus implements ShouldQueue
     public function handle()
     {
 
-        $redis = \Redis::connection();
+        $redis = \Redis::connection(); //@phpstan-ignore-line
         $variables = $redis->command('info');
 
         $metric = new GenericMixedMetric();
