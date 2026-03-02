@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Turbo124\Beacon\Collector;
 use Turbo124\Beacon\Generator;
 use Turbo124\Beacon\ExampleMetric\GenericGauge;
-use Turbo124\Beacon\ExampleMetric\GenericMultiMetric; 
+use Turbo124\Beacon\ExampleMetric\GenericMultiMetric;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -16,7 +16,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 class HdMetric implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public $tries = 1;
 
@@ -37,23 +40,22 @@ class HdMetric implements ShouldQueue
      */
     public function handle()
     {
-        
+
         $hdd_free = round(disk_free_space("/"), 2);
         $hdd_total = round(disk_total_space("/"), 2);
 
         $hdd_used = $hdd_total - $hdd_free;
-        $hdd_percent = round((float)sprintf('%.2f',($hdd_used / $hdd_total) * 100), 2);
+        $hdd_percent = round((float)sprintf('%.2f', ($hdd_used / $hdd_total) * 100), 2);
 
         $metric = new GenericMultiMetric();
         $metric->name = 'system.hd';
-        $metric->metric1 = $hdd_total; 
-        $metric->metric2 = $hdd_free; 
-        $metric->metric3 = $hdd_used; 
-        $metric->metric4 = $hdd_percent; 
+        $metric->metric1 = $hdd_total;
+        $metric->metric2 = $hdd_free;
+        $metric->metric3 = $hdd_used;
+        $metric->metric4 = $hdd_percent;
 
         $collector = new Collector();
         $collector->create($metric)
         ->batch();
     }
 }
-

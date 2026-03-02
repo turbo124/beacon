@@ -42,12 +42,11 @@ class CollectorServiceProvider extends ServiceProvider
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/beacon.php', 'beacon');
 
-        $this->app->bind('collector', function (){
-           return new Collector; 
+        $this->app->bind('collector', function () {
+            return new Collector();
         });
 
-        if(config('beacon.enabled'))
-        {
+        if (config('beacon.enabled')) {
             /* Register the scheduler */
             $this->app->booted(function () {
                 $schedule = app(Schedule::class);

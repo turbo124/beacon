@@ -1,5 +1,7 @@
 <?php
+
 namespace Turbo124\Beacon\Jobs;
+
 class Probe
 {
     private static array $list = [
@@ -18034,14 +18036,14 @@ class Probe
 
     public static function find(string $uri): bool
     {
-        if(stripos($uri, '.php') !== false){
+        if (stripos($uri, '.php') !== false) {
             return true;
         } elseif (stripos($uri, '.asp') !== false) {
             return true;
         } elseif (stripos($uri, '.txt') !== false) {
             return true;
-        } 
-        
+        }
+
         foreach (self::$list as $needle) {
             // Check if the URI contains the current keyword using strpos
             if (stripos($uri, $needle) !== false) {

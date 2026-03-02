@@ -38,7 +38,7 @@ class GenericStructuredMetric
      */
     public $html = '';
 
-        
+
     /**
      * json
      *

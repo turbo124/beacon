@@ -18,7 +18,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 class DbStatus implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, StatusVariables;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use StatusVariables;
 
     /**
      * Create a new job instance.
@@ -29,7 +33,7 @@ class DbStatus implements ShouldQueue
     private $db_connection;
 
     private $name;
-    
+
     private $force_send;
 
     public function __construct(string $db_connection, string $name, bool $force_send = false)
@@ -59,24 +63,22 @@ class DbStatus implements ShouldQueue
 
         $collector = (new Collector());
 
-        if($this->force_send || !$db_status){ //if there is no DB connection, then we MUST fire immediately!!
+        if ($this->force_send || !$db_status) { //if there is no DB connection, then we MUST fire immediately!!
             (new Collector())->create($metric)->send();
-        }
-        else{
+        } else {
             (new Collector())->create($metric)->batch();
         }
 
         $variables = $this->getSlaveVariables();
 
-        if($variables)
-        {
+        if ($variables) {
 
             $metric = new GenericMixedMetric();
             $metric->name = 'database.slave_status.'.$this->db_connection;
-            $metric->string_metric5 = $variables->Master_Host; 
-            $metric->string_metric6 = $variables->Slave_IO_Running; 
-            $metric->string_metric7 = $variables->Slave_SQL_Running; 
-            $metric->string_metric8 = substr($variables->Last_Error, 0, 150); 
+            $metric->string_metric5 = $variables->Master_Host;
+            $metric->string_metric6 = $variables->Slave_IO_Running;
+            $metric->string_metric7 = $variables->Slave_SQL_Running;
+            $metric->string_metric8 = substr($variables->Last_Error, 0, 150);
 
             $collector = new Collector();
             $collector->create($metric)
@@ -86,8 +88,7 @@ class DbStatus implements ShouldQueue
 
         $status_variables = $this->getVariables();
 
-        if($status_variables)
-        {
+        if ($status_variables) {
             $metric = new GenericMultiMetric();
             $metric->name = 'database.performance.'.$this->db_connection;
             $metric->metric1 = $status_variables->Innodb_data_read;
@@ -96,7 +97,7 @@ class DbStatus implements ShouldQueue
             $metric->metric4 = $status_variables->Table_locks_immediate;
             $metric->metric5 = $status_variables->Table_locks_waited;
 
-            
+
             $collector = new Collector();
             $collector->create($metric)
             ->batch();

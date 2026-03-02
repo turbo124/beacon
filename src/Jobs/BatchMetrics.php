@@ -47,7 +47,7 @@ class BatchMetrics implements ShouldQueue
 
         foreach ($metric_types as $type) {
 
-            $redis = Facades\Redis::connection(config('beacon.cache_connection',''));
+            $redis = Facades\Redis::connection(config('beacon.cache_connection', ''));
 
             $prefix = config('cache.prefix').config('beacon.cache_key').$type.'*';
 
@@ -69,12 +69,13 @@ class BatchMetrics implements ShouldQueue
                 continue;
             }
 
-            foreach($metrics as $key => $value)
+            foreach ($metrics as $key => $value) {
                 $metrics[$key] = unserialize($value);
+            }
 
             $generator = new Generator();
 
-            $generator->batchFire($metrics); 
+            $generator->batchFire($metrics);
         }
     }
 }

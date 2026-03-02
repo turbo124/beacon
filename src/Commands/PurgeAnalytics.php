@@ -23,14 +23,14 @@ class PurgeAnalytics extends Command
     public function handle()
     {
         $this->logMessage('Purging Data');
-            
+
         $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric', 'structured_metric'];
 
         foreach ($metric_types as $type) {
 
             $this->logMessage("purging {$type}");
-            
-            $redis = Facades\Redis::connection(config('beacon.cache_connection',''));
+
+            $redis = Facades\Redis::connection(config('beacon.cache_connection', ''));
 
             $prefix = config('cache.prefix').config('beacon.cache_key').$type.'*';
 

@@ -24,6 +24,7 @@
         "turbo124/waffy": "^1.0"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.94",
         "larastan/larastan": "^3.6",
         "orchestra/testbench": "^10.6",
         "phpstan/phpstan": "^2.1",

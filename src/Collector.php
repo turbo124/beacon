@@ -8,7 +8,6 @@ use Turbo124\Beacon\Jobs\CreateMetric;
 
 class Collector
 {
-
     public $metric;
 
     public function __construct()
@@ -48,9 +47,10 @@ class Collector
 
     public function send()
     {
-        
-        if(!config('beacon.enabled') || empty(config('beacon.api_key')))
+
+        if (!config('beacon.enabled') || empty(config('beacon.api_key'))) {
             return;
+        }
 
         $generator = (new Generator())->fire($this->metric);
 
@@ -59,9 +59,10 @@ class Collector
     public function queue()
     {
 
-        if(!config('beacon.enabled') || empty(config('beacon.api_key')))
+        if (!config('beacon.enabled') || empty(config('beacon.api_key'))) {
             return;
-        
+        }
+
         CreateMetric::dispatch($this->metric);
 
     }
@@ -74,8 +75,9 @@ class Collector
     public function batch()
     {
 
-        if(!config('beacon.enabled') || empty(config('beacon.api_key')))
+        if (!config('beacon.enabled') || empty(config('beacon.api_key'))) {
             return;
+        }
 
         Cache::put(config('beacon.cache_key') . $this->metric->type.microtime(true), $this->metric, 1800);
 

@@ -23,13 +23,13 @@ class CountMetrics extends Command
     public function handle()
     {
         $this->logMessage('Counting metrics');
-            
+
         $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric', 'structured_metric'];
 
         foreach ($metric_types as $type) {
 
-            
-            $redis = Facades\Redis::connection(config('beacon.cache_connection',''));
+
+            $redis = Facades\Redis::connection(config('beacon.cache_connection', ''));
 
             $prefix = config('cache.prefix').config('beacon.cache_key').$type.'*';
 

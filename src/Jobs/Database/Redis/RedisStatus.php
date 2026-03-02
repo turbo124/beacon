@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Turbo124\Beacon\Collector;
 use Turbo124\Beacon\Generator;
 use Turbo124\Beacon\ExampleMetric\GenericMixedMetric;
-use Turbo124\Beacon\Jobs\Database\Traits\StatusVariables; 
+use Turbo124\Beacon\Jobs\Database\Traits\StatusVariables;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -16,7 +16,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 class RedisStatus implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, StatusVariables;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use StatusVariables;
 
     /**
      * Create a new job instance.
@@ -41,11 +45,11 @@ class RedisStatus implements ShouldQueue
 
         $metric = new GenericMixedMetric();
         $metric->name = 'redis.status';
-        $metric->string_metric5 = $variables['Client']['connected_clients']; 
-        $metric->string_metric6 = $variables['Memory']['used_memory']; 
-        $metric->string_metric7 = $variables['Memory']['used_memory_peak_perc']; 
-        $metric->string_metric8 = $variables['Memory']['maxmemory_policy']; 
-        $metric->string_metric6 = $variables['Memory']['maxmemory_human']; 
+        $metric->string_metric5 = $variables['Client']['connected_clients'];
+        $metric->string_metric6 = $variables['Memory']['used_memory'];
+        $metric->string_metric7 = $variables['Memory']['used_memory_peak_perc'];
+        $metric->string_metric8 = $variables['Memory']['maxmemory_policy'];
+        $metric->string_metric6 = $variables['Memory']['maxmemory_human'];
 
         $collector = new Collector();
         $collector->create($metric)

@@ -26,37 +26,37 @@ class ForceSend extends Command
 
         $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric', 'structured_metric'];
 
-        foreach($metric_types as $type)
-        {
-            $redis = Facades\Redis::connection(config('beacon.cache_connection',''));
+        foreach ($metric_types as $type) {
+            $redis = Facades\Redis::connection(config('beacon.cache_connection', ''));
 
             $prefix = config('cache.prefix').config('beacon.cache_key').$type.'*';
 
             $metrics = $redis->keys($prefix);
 
-            if(is_array($metrics))
+            if (is_array($metrics)) {
                 $this->logMessage("I have " . count($metrics) . "pending to be sent");
+            }
 
         }
 
-         (new BatchMetrics())->handle();
+        (new BatchMetrics())->handle();
 
         $this->logMessage(date('Y-m-d h:i:s') . ' Sent Data!!');
 
-        foreach($metric_types as $type)
-        {
-            $redis = Facades\Redis::connection(config('beacon.cache_connection',''));
+        foreach ($metric_types as $type) {
+            $redis = Facades\Redis::connection(config('beacon.cache_connection', ''));
 
             $prefix = config('cache.prefix').config('beacon.cache_key').$type.'*';
 
             $metrics = $redis->keys($prefix);
 
-            if(is_array($metrics))
+            if (is_array($metrics)) {
                 $this->logMessage("I have " . count($metrics) . "pending to be sent");
+            }
         }
 
 
-        
+
     }
 
     private function logMessage($str)
