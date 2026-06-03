@@ -96,12 +96,18 @@ class GeneratorTest extends TestCase
         config(['beacon.endpoint' => 'https://collector.test/api']);
 
         $mock = new MockHandler([
-            new RequestException('failed', new Request('POST', 'https://collector.test/api/gauge/batch')),
+            new RequestException(
+                'failed',
+                new Request('POST', 'https://collector.test/api/gauge/batch'),
+                new Response(422, [], '{"error":"invalid gauge"}')
+            ),
         ]);
 
         $generator = new Generator(new Client(['handler' => HandlerStack::create($mock)]));
 
         $this->assertFalse($generator->batchFire([new GenericGauge()]));
+        $this->assertStringContainsString('HTTP 422', $generator->lastErrorMessage());
+        $this->assertStringContainsString('invalid gauge', $generator->lastErrorMessage());
     }
 
     #[Test]

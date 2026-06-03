@@ -50,7 +50,7 @@ class BatchMetricsTest extends TestCase
 
         $generator = new RecordingBatchGenerator([true, false]);
 
-        (new TestableBatchMetrics($generator))->handle();
+        $summary = (new TestableBatchMetrics($generator))->handle();
 
         Queue::assertNotPushed(SystemMetric::class);
 
@@ -59,6 +59,11 @@ class BatchMetricsTest extends TestCase
         $this->assertCount(1, $generator->calls[1]);
         $this->assertSame(array_slice($keys, 0, 40), $redis->deleted);
         $this->assertSame([array_slice($keys, 0, 40), array_slice($keys, 40)], $redis->mgetCalls);
+        $this->assertSame(41, $summary['gauge']['pending']);
+        $this->assertSame(41, $summary['gauge']['attempted']);
+        $this->assertSame(40, $summary['gauge']['deleted']);
+        $this->assertSame(1, $summary['gauge']['retained']);
+        $this->assertSame(['fake batch failure'], $summary['gauge']['errors']);
     }
 
     #[Test]
@@ -75,9 +80,11 @@ class BatchMetricsTest extends TestCase
 
         Redis::shouldReceive('connection')->andReturn($redis);
 
-        (new TestableBatchMetrics(new RecordingBatchGenerator([false])))->handle();
+        $summary = (new TestableBatchMetrics(new RecordingBatchGenerator([false])))->handle();
 
         $this->assertSame([], $redis->deleted);
+        $this->assertSame(1, $summary['gauge']['retained']);
+        $this->assertSame(['fake batch failure'], $summary['gauge']['errors']);
     }
 }
 
@@ -102,6 +109,11 @@ class RecordingBatchGenerator extends Generator
         $this->calls[] = $metric_array;
 
         return array_shift($this->results) ?? false;
+    }
+
+    public function lastErrorMessage(): ?string
+    {
+        return 'fake batch failure';
     }
 }
 
