@@ -3,7 +3,6 @@
 namespace Turbo124\Beacon\Jobs;
 
 use Turbo124\Beacon\Generator;
-use Turbo124\Beacon\Jobs\SystemMetric;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -38,8 +37,6 @@ class BatchMetrics implements ShouldQueue
         if (!config('beacon.enabled') || empty(config('beacon.api_key'))) {
             return;
         }
-
-        SystemMetric::dispatch();
 
         $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric', 'structured_metric'];
 

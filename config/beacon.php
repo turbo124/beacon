@@ -34,15 +34,9 @@ return [
     'cache_connection' => '',
 
     /**
-     * Determines whether to log the 
-     * host system variables using
-     * the built in metrics.
+     * Synthetic host system metrics are disabled by default.
      */
-    'system_logging' => [
-        'Turbo124\Beacon\Jobs\System\CpuMetric',
-        'Turbo124\Beacon\Jobs\System\HdMetric',
-        'Turbo124\Beacon\Jobs\System\MemMetric',
-    ],
+    'system_logging' => [],
 
     'database' => [
         'mysql' => [

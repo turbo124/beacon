@@ -52,7 +52,7 @@ class BatchMetricsTest extends TestCase
 
         (new TestableBatchMetrics($generator))->handle();
 
-        Queue::assertPushed(SystemMetric::class);
+        Queue::assertNotPushed(SystemMetric::class);
 
         $this->assertCount(2, $generator->calls);
         $this->assertCount(40, $generator->calls[0]);
