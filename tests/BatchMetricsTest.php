@@ -50,7 +50,7 @@ class BatchMetricsTest extends TestCase
 
         $generator = new RecordingBatchGenerator([true, false]);
 
-        $summary = (new TestableBatchMetrics($generator))->handle();
+        $summary = (new TestableBatchMetrics($generator))->flush();
 
         Queue::assertNotPushed(SystemMetric::class);
 
@@ -80,7 +80,7 @@ class BatchMetricsTest extends TestCase
 
         Redis::shouldReceive('connection')->andReturn($redis);
 
-        $summary = (new TestableBatchMetrics(new RecordingBatchGenerator([false])))->handle();
+        $summary = (new TestableBatchMetrics(new RecordingBatchGenerator([false])))->flush();
 
         $this->assertSame([], $redis->deleted);
         $this->assertSame(1, $summary['gauge']['retained']);

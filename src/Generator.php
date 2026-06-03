@@ -266,10 +266,10 @@ class Generator
         if (method_exists($throwable, 'getResponse') && $throwable->getResponse()) {
             $response = $throwable->getResponse();
             $body = substr(trim((string) $response->getBody()), 0, 1000);
-            $message .= ' HTTP '.$response->getStatusCode();
+            $message .= ' HTTP ' . $response->getStatusCode();
 
             if ($body !== '') {
-                $message .= ': '.preg_replace('/\s+/', ' ', $body);
+                $message .= ': ' . preg_replace('/\s+/', ' ', $body);
             }
         }
 

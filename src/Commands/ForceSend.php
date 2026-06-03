@@ -29,7 +29,7 @@ class ForceSend extends Command
         foreach ($metric_types as $type) {
             $redis = Facades\Redis::connection(config('beacon.cache_connection', ''));
 
-            $prefix = config('cache.prefix').config('beacon.cache_key').$type.'*';
+            $prefix = config('cache.prefix') . config('beacon.cache_key') . $type . '*';
 
             $metrics = $redis->keys($prefix);
 
@@ -39,7 +39,7 @@ class ForceSend extends Command
 
         }
 
-        $summary = (new BatchMetrics())->handle();
+        $summary = (new BatchMetrics())->flush();
 
         $this->logMessage('Finished force send');
         $this->logSummary($summary);
@@ -47,7 +47,7 @@ class ForceSend extends Command
         foreach ($metric_types as $type) {
             $redis = Facades\Redis::connection(config('beacon.cache_connection', ''));
 
-            $prefix = config('cache.prefix').config('beacon.cache_key').$type.'*';
+            $prefix = config('cache.prefix') . config('beacon.cache_key') . $type . '*';
 
             $metrics = $redis->keys($prefix);
 

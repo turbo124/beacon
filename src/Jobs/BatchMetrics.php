@@ -34,6 +34,11 @@ class BatchMetrics implements ShouldQueue
      */
     public function handle()
     {
+        $this->flush();
+    }
+
+    public function flush(): array
+    {
         $summary = $this->emptySummary();
 
         if (!config('beacon.enabled') || empty(config('beacon.api_key'))) {
