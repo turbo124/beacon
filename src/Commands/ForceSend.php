@@ -39,9 +39,10 @@ class ForceSend extends Command
 
         }
 
-        (new BatchMetrics())->handle();
+        $summary = (new BatchMetrics())->handle();
 
-        $this->logMessage(date('Y-m-d h:i:s') . ' Sent Data!!');
+        $this->logMessage('Finished force send');
+        $this->logSummary($summary);
 
         foreach ($metric_types as $type) {
             $redis = Facades\Redis::connection(config('beacon.cache_connection', ''));
@@ -57,6 +58,27 @@ class ForceSend extends Command
 
 
 
+    }
+
+    private function logSummary(array $summary): void
+    {
+        foreach ($summary as $type => $data) {
+            $pending = $data['pending'] ?? 0;
+            $attempted = $data['attempted'] ?? 0;
+            $deleted = $data['deleted'] ?? 0;
+            $retained = $data['retained'] ?? 0;
+            $errors = array_unique($data['errors'] ?? []);
+
+            if ($pending === 0 && $attempted === 0 && $deleted === 0 && $retained === 0 && count($errors) === 0) {
+                continue;
+            }
+
+            $this->logMessage("{$type} summary - pending: {$pending}, attempted: {$attempted}, deleted: {$deleted}, retained: {$retained}");
+
+            foreach ($errors as $error) {
+                $this->logMessage("{$type} error - {$error}");
+            }
+        }
     }
 
     private function logMessage($str)

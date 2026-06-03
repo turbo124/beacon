@@ -10,6 +10,8 @@ class Generator
 {
     private ?Client $client = null;
 
+    private ?\Throwable $lastException = null;
+
     public function __construct(?Client $client = null)
     {
         $this->client = $client;
@@ -140,6 +142,8 @@ class Generator
      */
     public function batchFire($metric_array)
     {
+        $this->lastException = null;
+
         if (!is_array($metric_array) || count($metric_array) == 0) {
             return true;
         }
@@ -170,9 +174,25 @@ class Generator
             // Telemetry must never break the host application. Also catches
             // the RejectionException that Promise\Utils::unwrap() throws when
             // an async request fails.
+            $this->lastException = $e;
+
             return false;
         }
 
+    }
+
+    public function lastException(): ?\Throwable
+    {
+        return $this->lastException;
+    }
+
+    public function lastErrorMessage(): ?string
+    {
+        if (!$this->lastException instanceof \Throwable) {
+            return null;
+        }
+
+        return $this->describeThrowable($this->lastException);
     }
 
     private function sendPromise($promises)
@@ -225,6 +245,35 @@ class Generator
         }
 
         return null;
+    }
+
+    private function describeThrowable(\Throwable $throwable): string
+    {
+        if (method_exists($throwable, 'getReason')) {
+            $reason = $throwable->getReason();
+
+            if ($reason instanceof \Throwable) {
+                return $this->describeThrowable($reason);
+            }
+
+            if (is_scalar($reason)) {
+                return (string) $reason;
+            }
+        }
+
+        $message = $throwable->getMessage() ?: get_class($throwable);
+
+        if (method_exists($throwable, 'getResponse') && $throwable->getResponse()) {
+            $response = $throwable->getResponse();
+            $body = substr(trim((string) $response->getBody()), 0, 1000);
+            $message .= ' HTTP '.$response->getStatusCode();
+
+            if ($body !== '') {
+                $message .= ': '.preg_replace('/\s+/', ' ', $body);
+            }
+        }
+
+        return $message;
     }
 
 }

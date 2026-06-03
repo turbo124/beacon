@@ -34,13 +34,13 @@ class BatchMetrics implements ShouldQueue
      */
     public function handle()
     {
+        $summary = $this->emptySummary();
+
         if (!config('beacon.enabled') || empty(config('beacon.api_key'))) {
-            return;
+            return $summary;
         }
 
-        $metric_types = ['counter', 'gauge', 'multi_metric', 'mixed_metric', 'structured_metric'];
-
-        foreach ($metric_types as $type) {
+        foreach (array_keys($summary) as $type) {
 
             $redis = Facades\Redis::connection(config('beacon.cache_connection', ''));
 
@@ -48,7 +48,14 @@ class BatchMetrics implements ShouldQueue
 
             $keys = $redis->keys($prefix);
 
-            if (!is_array($keys) || count($keys) === 0) {
+            if (!is_array($keys)) {
+                $summary[$type]['errors'][] = 'Redis keys() did not return an array.';
+                continue;
+            }
+
+            $summary[$type]['pending'] = count($keys);
+
+            if (count($keys) === 0) {
                 continue;
             }
 
@@ -58,25 +65,52 @@ class BatchMetrics implements ShouldQueue
                 $metrics = $redis->mget($keyChunk);
 
                 if (!is_array($metrics)) {
+                    $summary[$type]['retained'] += count($keyChunk);
+                    $summary[$type]['errors'][] = 'Redis mget() did not return an array.';
                     continue;
                 }
 
                 $metrics = $this->unserializeMetrics($metrics);
 
                 if (count($metrics) === 0) {
+                    $summary[$type]['retained'] += count($keyChunk);
+                    $summary[$type]['errors'][] = 'No valid cached metrics could be unserialized.';
                     continue;
                 }
 
+                $summary[$type]['attempted'] += count($metrics);
+
                 if ($generator->batchFire($metrics) === true) {
                     $this->deleteKeys($redis, $keyChunk);
+                    $summary[$type]['deleted'] += count($keyChunk);
+                    continue;
                 }
+
+                $summary[$type]['retained'] += count($keyChunk);
+                $summary[$type]['errors'][] = $generator->lastErrorMessage() ?? 'Batch send was not acknowledged.';
             }
         }
+
+        return $summary;
     }
 
     protected function makeGenerator(): Generator
     {
         return new Generator();
+    }
+
+    private function emptySummary(): array
+    {
+        return array_fill_keys(
+            ['counter', 'gauge', 'multi_metric', 'mixed_metric', 'structured_metric'],
+            [
+                'pending' => 0,
+                'attempted' => 0,
+                'deleted' => 0,
+                'retained' => 0,
+                'errors' => [],
+            ]
+        );
     }
 
     private function unserializeMetrics(array $values): array
