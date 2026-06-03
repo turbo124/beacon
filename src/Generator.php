@@ -8,7 +8,7 @@ use GuzzleHttp\{Client, HandlerStack, Middleware};
 
 class Generator
 {
-    private ?Client $client;
+    private ?Client $client = null;
 
     public function __construct(?Client $client = null)
     {
