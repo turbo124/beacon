@@ -41,18 +41,23 @@ class MemMetric implements ShouldQueue
      */
     public function handle()
     {
+        $mem_total_result = shell_exec("cat /proc/meminfo | grep MemTotal");
+        $mem_free_result = shell_exec("cat /proc/meminfo | grep MemFree");
+
+        if ($mem_total_result === null || $mem_free_result === null) {
+            return;
+        }
+
         $stat['mem_percent'] = round((float)shell_exec("free | grep Mem | awk '{print $3/$2 * 100.0}'"), 2);
-        $mem_result = shell_exec("cat /proc/meminfo | grep MemTotal");
-        $stat['mem_total'] = round((float)preg_replace("#[^0-9]+(?:\.[0-9]*)?#", "", $mem_result) / 1024 / 1024, 3);
-        $mem_result = shell_exec("cat /proc/meminfo | grep MemFree");
-        $stat['mem_free'] = round((float)preg_replace("#[^0-9]+(?:\.[0-9]*)?#", "", $mem_result) / 1024 / 1024, 3);
+        $stat['mem_total'] = round((float)preg_replace("#[^0-9]+(?:\.[0-9]*)?#", "", $mem_total_result) / 1024 / 1024, 3);
+        $stat['mem_free'] = round((float)preg_replace("#[^0-9]+(?:\.[0-9]*)?#", "", $mem_free_result) / 1024 / 1024, 3);
         $stat['mem_used'] = $stat['mem_total'] - $stat['mem_free'];
 
         $metric = new GenericMultiMetric();
         $metric->name = 'system.mem';
         $metric->metric1 = $stat['mem_total'];
         $metric->metric2 = $stat['mem_free'];
-        $metric->metric3 = $stat['mem_free'];
+        $metric->metric3 = $stat['mem_used'];
         $metric->metric4 = $stat['mem_percent'];
 
         $collector = new Collector();

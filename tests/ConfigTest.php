@@ -2,14 +2,13 @@
 
 namespace Turbo124\Beacon\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Turbo124\Beacon\Collector;
-use Turbo124\Beacon\CollectorServiceProvider;
-use Turbo124\Beacon\Beacon\Generator;
 
 class ConfigTest extends TestCase
 {
-    /** @test */
+    #[Test]
 	public function testValidInstanceType()
 	{
 		$collector = new Collector;

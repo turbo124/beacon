@@ -40,14 +40,13 @@ class NetworkMetric implements ShouldQueue
      */
     public function handle()
     {
-        $stream = '';
-
         $vnstat = popen("vnstat --json", 'r');
 
-        if (is_resource($vnstat)) {
-            $stream = '';
+        if (!is_resource($vnstat)) {
+            return;
         }
 
+        $stream = '';
 
         while (!feof($vnstat)) {
             $stream .= fgets($vnstat);
@@ -58,10 +57,22 @@ class NetworkMetric implements ShouldQueue
 
         $x = json_decode($stream);
 
+        if (!$x || !isset($x->interfaces)) {
+            return;
+        }
+
         foreach ($x->interfaces as $interface) {
+
+            if (empty($interface->traffic->fiveminute)) {
+                continue;
+            }
 
             $name = $interface->name;
             $network_metric = end($interface->traffic->fiveminute);
+
+            if (!$network_metric) {
+                continue;
+            }
 
             $metric = new GenericMultiMetric();
             $metric->name = 'network.activity.'.$name;

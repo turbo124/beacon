@@ -34,7 +34,7 @@ class ForceSend extends Command
             $metrics = $redis->keys($prefix);
 
             if (is_array($metrics)) {
-                $this->logMessage("I have " . count($metrics) . "pending to be sent");
+                $this->logMessage("I have " . count($metrics) . " pending to be sent");
             }
 
         }
@@ -51,7 +51,7 @@ class ForceSend extends Command
             $metrics = $redis->keys($prefix);
 
             if (is_array($metrics)) {
-                $this->logMessage("I have " . count($metrics) . "pending to be sent");
+                $this->logMessage("I have " . count($metrics) . " pending to be sent");
             }
         }
 

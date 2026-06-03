@@ -78,7 +78,7 @@ class DbStatus implements ShouldQueue
             $metric->string_metric5 = $variables->Master_Host;
             $metric->string_metric6 = $variables->Slave_IO_Running;
             $metric->string_metric7 = $variables->Slave_SQL_Running;
-            $metric->string_metric8 = substr($variables->Last_Error, 0, 150);
+            $metric->string_metric8 = substr($variables->Last_Error ?? '', 0, 150);
 
             $collector = new Collector();
             $collector->create($metric)

@@ -9,7 +9,7 @@ class GenericStructuredMetric
      *
      * Structured metric allows for a more complex metric to be sent either JSON / HTML
      *
-     * 	- counter
+     * 	- structured_metric
      *
      * @var string
      */
@@ -26,13 +26,12 @@ class GenericStructuredMetric
      *
      * date("Y-m-d H:i:s")
      *
-     * @var \DateTime
+     * @var string|null
      */
     public $datetime;
 
     /**
-     * The increment amount... should always be
-     * set to 0
+     * The HTML content for this metric
      *
      * @var string
      */

@@ -35,7 +35,9 @@ class CountMetrics extends Command
 
             $keys = $redis->keys($prefix);
 
-            $this->logMessage("{$type} - ".count($keys)." keys");
+            $count = is_array($keys) ? count($keys) : 0;
+
+            $this->logMessage("{$type} - ".$count." keys");
 
         }
 

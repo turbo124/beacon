@@ -26,9 +26,7 @@ class BatchMetrics implements ShouldQueue
      * @return void
      */
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * Execute the job.
@@ -49,33 +47,66 @@ class BatchMetrics implements ShouldQueue
 
             $redis = Facades\Redis::connection(config('beacon.cache_connection', ''));
 
-            $prefix = config('cache.prefix').config('beacon.cache_key').$type.'*';
+            $prefix = config('cache.prefix') . config('beacon.cache_key') . $type . '*';
 
             $keys = $redis->keys($prefix);
 
-            $metrics = false;
-
-            if (count($keys) > 0) {
-                $metrics = $redis->mget($keys);
-
-                $redis->pipeline(function ($pipe) use ($keys) { //@phpstan-ignore-line
-                    foreach ($keys as $key) {
-                        $pipe->del($key);
-                    }
-                });
-            }
-
-            if (!is_array($metrics)) {
+            if (!is_array($keys) || count($keys) === 0) {
                 continue;
             }
 
-            foreach ($metrics as $key => $value) {
-                $metrics[$key] = unserialize($value);
+            $generator = $this->makeGenerator();
+
+            foreach (array_chunk($keys, 40) as $keyChunk) {
+                $metrics = $redis->mget($keyChunk);
+
+                if (!is_array($metrics)) {
+                    continue;
+                }
+
+                $metrics = $this->unserializeMetrics($metrics);
+
+                if (count($metrics) === 0) {
+                    continue;
+                }
+
+                if ($generator->batchFire($metrics) === true) {
+                    $this->deleteKeys($redis, $keyChunk);
+                }
+            }
+        }
+    }
+
+    protected function makeGenerator(): Generator
+    {
+        return new Generator();
+    }
+
+    private function unserializeMetrics(array $values): array
+    {
+        $metrics = [];
+
+        foreach ($values as $value) {
+            if (!is_string($value)) {
+                continue;
             }
 
-            $generator = new Generator();
+            $metric = @unserialize($value);
 
-            $generator->batchFire($metrics);
+            if (is_object($metric) || is_array($metric)) {
+                $metrics[] = $metric;
+            }
         }
+
+        return $metrics;
+    }
+
+    private function deleteKeys($redis, array $keys): void
+    {
+        $redis->pipeline(function ($pipe) use ($keys) {
+            foreach ($keys as $key) {
+                $pipe->del($key);
+            }
+        });
     }
 }

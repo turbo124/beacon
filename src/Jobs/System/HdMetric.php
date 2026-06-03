@@ -41,11 +41,18 @@ class HdMetric implements ShouldQueue
     public function handle()
     {
 
-        $hdd_free = round(disk_free_space("/"), 2);
-        $hdd_total = round(disk_total_space("/"), 2);
+        $hdd_free = disk_free_space("/");
+        $hdd_total = disk_total_space("/");
+
+        if ($hdd_free === false || $hdd_total === false || $hdd_total == 0) {
+            return;
+        }
+
+        $hdd_free = round($hdd_free, 2);
+        $hdd_total = round($hdd_total, 2);
 
         $hdd_used = $hdd_total - $hdd_free;
-        $hdd_percent = round((float)sprintf('%.2f', ($hdd_used / $hdd_total) * 100), 2);
+        $hdd_percent = round(($hdd_used / $hdd_total) * 100, 2);
 
         $metric = new GenericMultiMetric();
         $metric->name = 'system.hd';

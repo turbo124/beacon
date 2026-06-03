@@ -38,7 +38,7 @@ class GenericMixedMetric
      *
      * date("Y-m-d H:i:s")
      *
-     * @var \DateTime
+     * @var string|null
      */
     public $datetime;
 

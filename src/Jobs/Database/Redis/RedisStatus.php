@@ -45,11 +45,11 @@ class RedisStatus implements ShouldQueue
 
         $metric = new GenericMixedMetric();
         $metric->name = 'redis.status';
-        $metric->string_metric5 = $variables['Client']['connected_clients'];
-        $metric->string_metric6 = $variables['Memory']['used_memory'];
-        $metric->string_metric7 = $variables['Memory']['used_memory_peak_perc'];
-        $metric->string_metric8 = $variables['Memory']['maxmemory_policy'];
-        $metric->string_metric6 = $variables['Memory']['maxmemory_human'];
+        $metric->string_metric5 = $variables['Clients']['connected_clients'] ?? ($variables['Client']['connected_clients'] ?? '');
+        $metric->string_metric6 = $variables['Memory']['used_memory'] ?? '';
+        $metric->string_metric7 = $variables['Memory']['used_memory_peak_perc'] ?? '';
+        $metric->string_metric8 = $variables['Memory']['maxmemory_policy'] ?? '';
+        $metric->string_metric9 = $variables['Memory']['maxmemory_human'] ?? '';
 
         $collector = new Collector();
         $collector->create($metric)

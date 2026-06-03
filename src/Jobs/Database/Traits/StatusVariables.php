@@ -9,7 +9,11 @@ trait StatusVariables
     public function getVariables()
     {
 
-        $db = DB::select("SHOW STATUS");
+        try {
+            $db = DB::select("SHOW STATUS");
+        } catch (\Throwable $e) {
+            return false;
+        }
 
         $obj = new \stdClass();
 
@@ -30,7 +34,11 @@ trait StatusVariables
     public function getSlaveVariables()
     {
 
-        $db = DB::select("SHOW SLAVE STATUS");
+        try {
+            $db = DB::select("SHOW SLAVE STATUS");
+        } catch (\Throwable $e) {
+            return false;
+        }
 
         if (count($db) >= 1) {
             return $db[0];

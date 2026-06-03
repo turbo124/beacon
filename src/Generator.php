@@ -2,13 +2,19 @@
 
 namespace Turbo124\Beacon;
 
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise;
 use Psr\Http\Message\{RequestInterface, ResponseInterface};
-use GuzzleHttp\{Client, HandlerStack, Middleware, RetryMiddleware};
+use GuzzleHttp\{Client, HandlerStack, Middleware};
 
 class Generator
 {
+    private ?Client $client;
+
+    public function __construct(?Client $client = null)
+    {
+        $this->client = $client;
+    }
+
     /**
      * The Collector Endpoint where
      * we send our data to be injested
@@ -41,11 +47,14 @@ class Generator
      */
     private function httpClient()
     {
+        if ($this->client instanceof Client) {
+            return $this->client;
+        }
 
         $maxRetries = 3;
 
 
-        $decider = function (int $retries, RequestInterface $request, ResponseInterface $response = null) use ($maxRetries): bool {
+        $decider = function (int $retries, RequestInterface $request, ?ResponseInterface $response = null) use ($maxRetries): bool {
             return
                 $retries < $maxRetries
                 && null !== $response
@@ -54,7 +63,10 @@ class Generator
 
         $delay = function (int $retries, ResponseInterface $response): int {
             if (!$response->hasHeader('Retry-After')) {
-                return RetryMiddleware::exponentialDelay($retries);
+                // Exponential backoff in milliseconds. Inlined because
+                // RetryMiddleware::exponentialDelay() is deprecated in
+                // Guzzle 7.11 and removed in 8.0.
+                return (int) (2 ** ($retries - 1)) * 1000;
             }
 
             $retryAfter = $response->getHeaderLine('Retry-After');
@@ -69,11 +81,11 @@ class Generator
         $stack = HandlerStack::create();
         $stack->push(Middleware::retry($decider, $delay));
 
-        return new \GuzzleHttp\Client(['handler'  => $stack, 'headers' =>
-            [
-            'Authorization' => 'Bearer ' . $this->apiKey(),
-            'Accept'        => 'application/json'
-            ]
+        return new \GuzzleHttp\Client(['handler'  => $stack, 'headers'
+            => [
+                'Authorization' => 'Bearer ' . $this->apiKey(),
+                'Accept'        => 'application/json',
+            ],
         ]);
     }
 
@@ -87,14 +99,18 @@ class Generator
     {
         $data['metrics'][] = $metric;
 
+        $endpoint = $this->endPoint($data['metrics'][0]->type);
+
+        $data['metrics'] = $this->toArrays($data['metrics']);
+
         $client = $this->httpClient();
 
         try {
 
-            $client->request('POST', $this->endPoint($data['metrics'][0]->type), ['form_params' => $data]);
+            $client->request('POST', $endpoint, ['form_params' => $data]);
 
-        } catch (RequestException $e) {
-
+        } catch (\Throwable $e) {
+            // Telemetry must never break the host application.
         }
 
     }
@@ -103,14 +119,16 @@ class Generator
     {
         $data['metrics'][] = $metric;
 
+        $data['metrics'] = $this->toArrays($data['metrics']);
+
         $client = $this->httpClient();
 
         try {
 
             $client->request('POST', $this->alertEndPoint(), ['form_params' => $data]);
 
-        } catch (RequestException $e) {
-
+        } catch (\Throwable $e) {
+            // Telemetry must never break the host application.
         }
     }
 
@@ -123,33 +141,36 @@ class Generator
     public function batchFire($metric_array)
     {
         if (!is_array($metric_array) || count($metric_array) == 0) {
-            return;
+            return true;
         }
 
         $client = $this->httpClient();
 
         try {
+            foreach ($this->groupMetricsByType($metric_array) as $type => $metrics) {
+                $batch_of = 40;
+                $batch = array_chunk($metrics, $batch_of);
 
-            $batch_of = 40;
-            $batch = array_chunk($metric_array, $batch_of);
+                /* Concurrency ++ */
+                foreach ($batch as $key => $value) {
+                    $data['metrics'] = $this->toArrays($value);
 
-            /* Concurrency ++ */
-            foreach ($batch as $key => $value) {
+                    $promises = [
+                        $key => $client->requestAsync('POST', $this->endPoint($type), ['form_params' => $data]),
+                    ];
 
-                $data['metrics'] = $value;
+                    $this->sendPromise($promises);
 
-                $promises = [
-                    $key => $client->requestAsync('POST', $this->endPoint($metric_array[0]->type), ['form_params' => $data])
-                ];
-
-                $this->sendPromise($promises);
-
+                }
             }
 
+            return true;
 
-        } catch (RequestException $e) {
-
-            // info($e->getMessage());
+        } catch (\Throwable $e) {
+            // Telemetry must never break the host application. Also catches
+            // the RejectionException that Promise\Utils::unwrap() throws when
+            // an async request fails.
+            return false;
         }
 
     }
@@ -157,6 +178,53 @@ class Generator
     private function sendPromise($promises)
     {
         $responses = Promise\Utils::unwrap($promises);
+    }
+
+    /**
+     * Normalises metric objects into plain arrays so they can be safely
+     * serialized by Guzzle's form_params (http_build_query).
+     *
+     * Guzzle 7.11 deprecates - and 8.0 rejects - passing objects to
+     * form_params. Metric classes expose only public properties, so an
+     * (array) cast yields the exact same keys http_build_query previously
+     * generated, keeping the wire format byte-for-byte identical.
+     *
+     * @param  array $metrics  Array of metric objects (or arrays)
+     * @return array           The metrics as plain arrays
+     */
+    private function toArrays(array $metrics): array
+    {
+        return array_map(fn($metric) => is_object($metric) ? (array) $metric : $metric, $metrics);
+    }
+
+    private function groupMetricsByType(array $metrics): array
+    {
+        $grouped = [];
+
+        foreach ($metrics as $metric) {
+            $type = $this->metricType($metric);
+
+            if ($type === null) {
+                throw new \InvalidArgumentException('Metric type is required.');
+            }
+
+            $grouped[$type][] = $metric;
+        }
+
+        return $grouped;
+    }
+
+    private function metricType($metric): ?string
+    {
+        if (is_object($metric) && isset($metric->type)) {
+            return (string) $metric->type;
+        }
+
+        if (is_array($metric) && isset($metric['type'])) {
+            return (string) $metric['type'];
+        }
+
+        return null;
     }
 
 }

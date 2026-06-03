@@ -3,14 +3,14 @@
 namespace Turbo124\Beacon\Tests;
 
 use Illuminate\Support\Facades\Cache;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Turbo124\Beacon\Collector;
 use Turbo124\Beacon\CollectorServiceProvider;
-use Turbo124\Beacon\Beacon\Generator;
 
 class CacheTest extends TestCase
 {
-    /** @test */
+    #[Test]
 	public function testCacheGetAndPut()
 	{
 
